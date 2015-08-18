@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -21,6 +23,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MainActivity extends Activity {
@@ -29,6 +33,7 @@ public class MainActivity extends Activity {
     List<FoodItem>items;
     TextView ErrorView;
     String uid;
+    Handler handler;
     FoodArrayAdapter foodArrayAdapter;
     public final String TAG="MainActivity";
     @Override
@@ -82,6 +87,16 @@ public class MainActivity extends Activity {
         {
             e.printStackTrace();
         }
+        handler = new Handler()
+        {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                listView.setAdapter(foodArrayAdapter);
+            }
+        };
+
+
 
     }
 
@@ -120,21 +135,24 @@ public class MainActivity extends Activity {
 
         @Override
         protected void onPostExecute(JSONObject jsonObject) {
-               SuperOnPostExecute(jsonObject);
+              super.onPostExecute(jsonObject);
                try
                {
                    if(jsonObject.get("state").equals("registered"))
                    {
-                        LoadMenu loadMenu  = new LoadMenu();
-                       try {
-                           JSONObject toSend = new JSONObject();
-                           toSend.put("type","get-menu");
-                           loadMenu.execute(toSend);
-                       }
-                       catch (Exception e)
-                       {
-                           e.printStackTrace();
-                       }
+                       final Timer t = new Timer();
+                       t.scheduleAtFixedRate(new TimerTask() {
+                           @Override
+                           public void run() {
+                               if (FoodKing.gotMenu)
+                               {
+                                   foodArrayAdapter = new FoodArrayAdapter(getApplicationContext(),R.layout.fooditemlist,FoodKing.FoodMenu);
+                                   handler.sendEmptyMessage(1);
+                                   t.cancel();
+
+                               }
+                           }
+                       },0,1000);
                    }
                    else if(jsonObject.get("state").equals("does-not-exist"))
                    {
@@ -158,41 +176,5 @@ public class MainActivity extends Activity {
                }
         }
     }
-    public class LoadMenu extends JSONServerComm
-    {
-        @Override
-        protected void onPostExecute(JSONObject jsonObject) {
-           SuperOnPostExecute(jsonObject);
-            List<FoodItem> items = new ArrayList<>();
-            try
-            {
-                if(jsonObject.get("state").equals("got-menu"))
-                {
-                    JSONArray menu=jsonObject.getJSONArray("menu");
-                    for(int i=0;i<menu.length();i++)
-                    {
-                        JSONObject item = menu.getJSONObject(i);
-                        items.add(new FoodItem(item.getString("name"),Integer.parseInt(item.getString("price"))));
 
-                    }
-                    foodArrayAdapter=new FoodArrayAdapter(getApplicationContext(),R.layout.fooditemlist,items);
-                    listView.setAdapter(foodArrayAdapter);
-                    Log.d("MainActivity","got items");
-                    Log.d("MainActivity",items.toString());
-
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(),"Unknown error in loading menu. Please contact the administrator",Toast.LENGTH_LONG).show();
-                    Log.e("Menu Loader","Returned Error");
-                }
-
-
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
 }

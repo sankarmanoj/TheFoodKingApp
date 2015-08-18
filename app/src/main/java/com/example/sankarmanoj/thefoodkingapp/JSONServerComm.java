@@ -62,10 +62,7 @@ public class JSONServerComm extends AsyncTask<JSONObject,String,JSONObject>{
         super.onPostExecute(jsonObject);
 
     }
-    protected void SuperOnPostExecute(JSONObject jsonObject)
-    {
-        super.onPostExecute(jsonObject);
-    }
+
 
     @Override
     protected JSONObject doInBackground(JSONObject... params) {

@@ -29,11 +29,14 @@ import android.app.DialogFragment;
 public class Login extends Activity {
     Boolean registered=false;
     EditText EmailET;
+    Dialog dialog;
     Button RegisterButton;
     EditText NameET;
     EditText Password;
     EditText ConfirmPass;
     public final String TAG="LoginActivity";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -44,42 +47,47 @@ public class Login extends Activity {
             startActivity(intent);
             finish();
         }
+        else
+        {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle("Do you have an account?");
+            alertDialogBuilder.setPositiveButton("Yes - Login",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    registered=true;
+                    Log.d(TAG,String.valueOf(registered));
+                    ConfirmPass.setVisibility(View.INVISIBLE);
+                    dialog.dismiss();
+                }
+            });
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setNegativeButton("No - Register", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    registered=false;
+                    ConfirmPass.setVisibility(View.VISIBLE);
+                    ConfirmPass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            if (hasFocus) {
+                                ConfirmPass.setText("");
+                                ConfirmPass.setOnFocusChangeListener(null);
+                                ConfirmPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                                ConfirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                            }
+                        }
+                    });
+                    dialog.dismiss();
+                }
+            });
+            dialog=  alertDialogBuilder.create();
+            dialog.show();
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("Do you have an account?");
-        alertDialogBuilder.setPositiveButton("Yes - Login",new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                registered=true;
-                Log.d(TAG,String.valueOf(registered));
-                ConfirmPass.setVisibility(View.INVISIBLE);
-                dialog.dismiss();
-            }
-        });
-        alertDialogBuilder.setCancelable(false);
-        alertDialogBuilder.setNegativeButton("No - Register", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                registered=false;
-                ConfirmPass.setVisibility(View.VISIBLE);
-                ConfirmPass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (hasFocus) {
-                            ConfirmPass.setText("");
-                            ConfirmPass.setOnFocusChangeListener(null);
-                            ConfirmPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            ConfirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-                        }
-                    }
-                });
-                dialog.dismiss();
-            }
-        });
-        Dialog dialog=  alertDialogBuilder.create();
-        dialog.show();
+
 
         RegisterButton = (Button)findViewById(R.id.registerButton);
         EmailET=(EditText)findViewById(R.id.emailEdit);
