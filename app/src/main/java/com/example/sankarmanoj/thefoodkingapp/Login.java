@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
-
+import android.app.DialogFragment;
 public class Login extends Activity {
 
     EditText EmailET;
@@ -155,5 +155,9 @@ public class Login extends Activity {
     }
     boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+    public static class RegorLogin extends DialogFragment
+    {
+
     }
 }
