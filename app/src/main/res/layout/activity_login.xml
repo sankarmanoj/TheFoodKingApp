@@ -70,7 +70,8 @@
         android:layout_below="@+id/passEditText"
         android:layout_alignLeft="@+id/passEditText"
         android:layout_alignStart="@+id/passEditText"
-        android:text="Confirm Password" />
+        android:text="Confirm Password"
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="wrap_content"

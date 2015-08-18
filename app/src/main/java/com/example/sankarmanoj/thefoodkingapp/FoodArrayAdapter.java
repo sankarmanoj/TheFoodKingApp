@@ -44,6 +44,7 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
         }
         final FoodItem item = getItem(position);
         ImageButton imageButton = (ImageButton) rowView.findViewById(R.id.imageButton);
+        final ViewHolder viewHolder = (ViewHolder)rowView.getTag();
 
 
 
@@ -53,8 +54,11 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
                 public void onClick(View v) {
 
                     try {
-                        if(item.qty<item.maxQty)
-                        (item.qty)++;
+                        if(item.qty<item.maxQty) {
+                            (item.qty)++;
+                            viewHolder.qty.setText(Integer.toString(item.qty));
+                        }
+
                         else
                             Log.d("Adapter","Max quantity reached");
 
@@ -64,7 +68,7 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
                 }
             });
 
-        ViewHolder viewHolder = (ViewHolder)rowView.getTag();
+
         viewHolder.name.setText(item.name);
         viewHolder.price.setText(item.getPrice());
         viewHolder.qty.setText(Integer.toString(item.qty));
