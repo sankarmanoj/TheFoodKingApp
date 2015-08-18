@@ -4,6 +4,13 @@
     tools:context="com.example.sankarmanoj.thefoodkingapp.MainActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/checkout"
+        android:title="C"
+        android:icon="@drawable/ic_action_forward"
+        app:showAsAction="always"
+
+        />
     <item android:id="@+id/logout" android:title="Logout"
         android:orderInCategory="10"/>
 </menu>
