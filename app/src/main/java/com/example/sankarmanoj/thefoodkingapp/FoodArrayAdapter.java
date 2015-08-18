@@ -54,9 +54,9 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
                 public void onClick(View v) {
 
                     try {
-                        if((item.qty)<(item.maxQty)) {
-                            (item.qty)++;
-                            viewHolder.qty.setText(Integer.toString(item.qty));
+                        if((item.inCartQuantity)<(item.quantity)) {
+                            (item.inCartQuantity)++;
+                            viewHolder.qty.setText(Integer.toString(item.inCartQuantity));
                         }
 
                         else
@@ -71,7 +71,7 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
 
         viewHolder.name.setText(item.name);
         viewHolder.price.setText(item.getPrice());
-        viewHolder.qty.setText(Integer.toString(item.qty));
+        viewHolder.qty.setText(Integer.toString(item.inCartQuantity));
         return rowView;
     }
 }

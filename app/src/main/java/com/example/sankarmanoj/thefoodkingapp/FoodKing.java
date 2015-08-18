@@ -48,7 +48,7 @@ public class FoodKing extends Application {
                     for(int i=0;i<menu.length();i++)
                     {
                         JSONObject item = menu.getJSONObject(i);
-                        items.add(new FoodItem(item.getString("name"),Integer.parseInt(item.getString("price"))));
+                        items.add(new FoodItem(item.getString("name"),Integer.parseInt(item.getString("price")),Integer.parseInt(item.getString("quantity"))));
 
                     }
                     FoodMenu=items;

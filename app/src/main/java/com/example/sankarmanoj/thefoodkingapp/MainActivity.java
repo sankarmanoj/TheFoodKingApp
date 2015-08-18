@@ -42,24 +42,15 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         uid = sharedPreferences.getString("uid","null");
-       /* if (uid.equals("null"))
+        if (uid.equals("null"))
         {
             Intent intent = new Intent(getApplicationContext(),Login.class);
             startActivity(intent);
             finish();
-        }*/
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LoadMenu loadMenu  = new LoadMenu();
-        try {
-            JSONObject toSend = new JSONObject();
-            toSend.put("type","get-menu");
-            loadMenu.execute(toSend);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+
 checkOut=(Button) findViewById(R.id.checkOutButton);
 
         ErrorView = (TextView)findViewById(R.id.errorView);
@@ -111,7 +102,7 @@ checkOut=(Button) findViewById(R.id.checkOutButton);
         };
 
 
->>>>>>> master
+
 
     }
 

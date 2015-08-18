@@ -10,15 +10,15 @@ public class FoodItem {
     {
         COLD_DRINK,HOT_DRINK,HOT_EATABLE,COLD_EATABLE
     }
-    FoodItem(String name,int price,int maxQty,int qty)
+    FoodItem(String name,int price,int maxQty)
     {
         this.name=name;
         this.price=price;
-        this.inCartQuantity=qty;
-        this.maxQty=maxQty;
+        this.inCartQuantity=0;
+        this.quantity=maxQty;
     }
     Kind TypeOfFood;
-    int maxQty;
+    int quantity;
     int inCartQuantity;
     int price;
     String name;
