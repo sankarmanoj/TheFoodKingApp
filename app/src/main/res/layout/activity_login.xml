@@ -70,7 +70,8 @@
         android:layout_below="@+id/passEditText"
         android:layout_alignLeft="@+id/passEditText"
         android:layout_alignStart="@+id/passEditText"
-        android:text="Confirm Password" />
+        android:text="Confirm Password"
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -81,16 +82,5 @@
         android:layout_alignTop="@+id/passEditText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView3"
-        android:layout_above="@+id/registerButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="238dp"
-        android:layout_marginStart="238dp" />
 
 </RelativeLayout>

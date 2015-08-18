@@ -60,33 +60,7 @@ public class JSONServerComm extends AsyncTask<JSONObject,String,JSONObject>{
     @Override
     protected void onPostExecute(JSONObject jsonObject) {
         super.onPostExecute(jsonObject);
-        try {
-            if (jsonObject.get("state").equals("success"))
-            {
-                String uid=jsonObject.getString("uid");
-                SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
-                sharedPreferences.edit().putString("uid",uid).apply();
-                Intent intent = new Intent(context.getApplicationContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                context.startActivity(intent);
-                if (activity!=null)
-                {
-                    activity.finish();
-                }
 
-            }
-            else if(jsonObject.get("state").equals("email-error"))
-            {
-                register.setEnabled(true);
-            }
-        }
-        catch (Exception e)
-        {
-            register.setEnabled(true);
-
-            e.printStackTrace();
-        }
     }
     protected void SuperOnPostExecute(JSONObject jsonObject)
     {
