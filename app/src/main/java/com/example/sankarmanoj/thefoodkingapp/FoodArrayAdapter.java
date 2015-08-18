@@ -1,12 +1,13 @@
 package com.example.sankarmanoj.thefoodkingapp;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
+import android.widget.ImageButton;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
     static class ViewHolder {
         public TextView price;
         public TextView name;
+        public TextView qty;
     }
 
     public FoodArrayAdapter(Context context, int resource, List<FoodItem> objects) {
@@ -37,12 +39,35 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.name=(TextView)rowView.findViewById(R.id.titleTextView);
             viewHolder.price=(TextView)rowView.findViewById(R.id.priceTextView);
+            viewHolder.qty=(TextView)rowView.findViewById(R.id.quantityTextView);
             rowView.setTag(viewHolder);
         }
-        FoodItem item = getItem(position);
+        final FoodItem item = getItem(position);
+        ImageButton imageButton = (ImageButton) rowView.findViewById(R.id.imageButton);
+
+
+
+            imageButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    try {
+                        if(item.qty<item.maxQty)
+                        (item.qty)++;
+                        else
+                            Log.d("Adapter","Max quantity reached");
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
         ViewHolder viewHolder = (ViewHolder)rowView.getTag();
         viewHolder.name.setText(item.name);
         viewHolder.price.setText(item.getPrice());
+        viewHolder.qty.setText(Integer.toString(item.qty));
         return rowView;
     }
 }

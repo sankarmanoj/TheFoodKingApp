@@ -33,12 +33,15 @@ public class Login extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String uid = sharedPreferences.getString("uid","null");
-        if (!uid.equals("null"))
+       /* if (!uid.equals("null"))
         {
             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
             startActivity(intent);
             finish();
-        }
+        }*/
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+        finish();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         RegisterButton = (Button)findViewById(R.id.registerButton);

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,14 +36,25 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         uid = sharedPreferences.getString("uid","null");
-        if (uid.equals("null"))
+       /* if (uid.equals("null"))
         {
             Intent intent = new Intent(getApplicationContext(),Login.class);
             startActivity(intent);
             finish();
-        }
+        }*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LoadMenu loadMenu  = new LoadMenu();
+        try {
+            JSONObject toSend = new JSONObject();
+            toSend.put("type","get-menu");
+            loadMenu.execute(toSend);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
         ErrorView = (TextView)findViewById(R.id.errorView);
         ErrorView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +83,7 @@ public class MainActivity extends Activity {
         {
             Log.i(TAG,"Food Array is null");
         }
-        CheckRegistration checkRegistration = new CheckRegistration();
+        /* CheckRegistration checkRegistration = new CheckRegistration();
         try {
             JSONObject toSend = new JSONObject();
             toSend.put("type","check-registration");
@@ -81,7 +93,7 @@ public class MainActivity extends Activity {
         catch (Exception e)
         {
             e.printStackTrace();
-        }
+        }*/
 
     }
 
@@ -172,7 +184,7 @@ public class MainActivity extends Activity {
                     for(int i=0;i<menu.length();i++)
                     {
                         JSONObject item = menu.getJSONObject(i);
-                        items.add(new FoodItem(item.getString("name"),Integer.parseInt(item.getString("price"))));
+                        items.add(new FoodItem(item.getString("name"),Integer.parseInt(item.getString("price")),Integer.parseInt(item.getString("quantity")),0));
 
                     }
                     foodArrayAdapter=new FoodArrayAdapter(getApplicationContext(),R.layout.fooditemlist,items);
