@@ -30,7 +30,7 @@ import java.util.TimerTask;
 public class MainActivity extends Activity {
 
     ListView listView;
-    List<FoodItem>items;
+
     TextView ErrorView;
     String uid;
     Handler handler;
