@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sankarmanoj.thefoodkingapp" >
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:name=".FoodKing"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".Login"
-            android:launchMode="singleInstance"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,6 +24,7 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
+
     </application>
 
 </manifest>
