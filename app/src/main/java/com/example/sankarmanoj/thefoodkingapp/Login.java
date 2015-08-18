@@ -46,6 +46,7 @@ public class Login extends Activity {
             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
             startActivity(intent);
             finish();
+
         }
         else
         {
@@ -84,6 +85,7 @@ public class Login extends Activity {
             dialog=  alertDialogBuilder.create();
             dialog.show();
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -220,7 +222,7 @@ public class Login extends Activity {
     boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
-    public class LoginServerComm extends JSONServerComm
+        public class LoginServerComm extends JSONServerComm
     {
         @Override
         protected void onPostExecute(JSONObject jsonObject) {
@@ -310,5 +312,6 @@ public class Login extends Activity {
                 e.printStackTrace();
             }
         }
+
     }
 }

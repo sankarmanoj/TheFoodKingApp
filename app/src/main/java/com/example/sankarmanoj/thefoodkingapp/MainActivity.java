@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +30,7 @@ import java.util.TimerTask;
 
 
 public class MainActivity extends Activity {
-
+    Button checkOut;
     ListView listView;
 
     TextView ErrorView;
@@ -40,14 +42,26 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         uid = sharedPreferences.getString("uid","null");
-        if (uid.equals("null"))
+       /* if (uid.equals("null"))
         {
             Intent intent = new Intent(getApplicationContext(),Login.class);
             startActivity(intent);
             finish();
-        }
+        }*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LoadMenu loadMenu  = new LoadMenu();
+        try {
+            JSONObject toSend = new JSONObject();
+            toSend.put("type","get-menu");
+            loadMenu.execute(toSend);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+checkOut=(Button) findViewById(R.id.checkOutButton);
+
         ErrorView = (TextView)findViewById(R.id.errorView);
         ErrorView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +111,7 @@ public class MainActivity extends Activity {
         };
 
 
+>>>>>>> master
 
     }
 
@@ -176,5 +191,6 @@ public class MainActivity extends Activity {
                }
         }
     }
+
 
 }
