@@ -54,7 +54,7 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
                 public void onClick(View v) {
 
                     try {
-                        if(item.qty<item.maxQty) {
+                        if((item.qty)<(item.maxQty)) {
                             (item.qty)++;
                             viewHolder.qty.setText(Integer.toString(item.qty));
                         }

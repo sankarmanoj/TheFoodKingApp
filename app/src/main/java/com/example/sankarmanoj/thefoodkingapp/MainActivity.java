@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,7 +26,7 @@ import java.util.List;
 
 
 public class MainActivity extends Activity {
-
+    Button checkOut;
     ListView listView;
     List<FoodItem>items;
     TextView ErrorView;
@@ -54,6 +55,7 @@ public class MainActivity extends Activity {
         {
             e.printStackTrace();
         }
+checkOut=(Button) findViewById(R.id.checkOutButton);
 
         ErrorView = (TextView)findViewById(R.id.errorView);
         ErrorView.setOnClickListener(new View.OnClickListener() {

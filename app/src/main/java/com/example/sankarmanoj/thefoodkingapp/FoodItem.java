@@ -14,12 +14,12 @@ public class FoodItem {
     {
         this.name=name;
         this.price=price;
-        this.qty=qty;
+        this.inCartQuantity=qty;
         this.maxQty=maxQty;
     }
     Kind TypeOfFood;
     int maxQty;
-    int qty;
+    int inCartQuantity;
     int price;
     String name;
     URI image;
