@@ -32,7 +32,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
     Button checkOut;
     ListView listView;
 
@@ -116,7 +116,6 @@ public class MainActivity extends Activity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
         return true;
-
     }
 
     @Override
@@ -137,7 +136,11 @@ public class MainActivity extends Activity {
             Intent intent = new Intent(getApplicationContext(),Login.class);
             startActivity(intent);
         }
-
+else if(id==R.id.checkout)
+        {
+            Intent i = new Intent(getApplicationContext(), FoodCart.class);
+            startActivity(i);
+        }
         return super.onOptionsItemSelected(item);
     }
     public class CheckRegistration extends JSONServerComm

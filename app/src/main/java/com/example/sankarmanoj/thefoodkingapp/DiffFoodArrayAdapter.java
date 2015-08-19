@@ -6,14 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
 import java.util.List;
 
 /**
  * Created by sankarmanoj on 8/14/15.
  */
-public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
+public class DiffFoodArrayAdapter extends ArrayAdapter<FoodItem> {
     Context context;
     int resource;
     static class ViewHolder {
@@ -22,7 +23,7 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
         public TextView qty;
     }
 
-    public FoodArrayAdapter(Context context, int resource, List<FoodItem> objects) {
+    public DiffFoodArrayAdapter(Context context, int resource, List<FoodItem> objects) {
 
         super(context, resource, objects);
         this.context = context;
@@ -35,38 +36,18 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
         if(rowView==null)
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-            rowView=inflater.inflate(R.layout.fooditemlist1,null);
+            rowView=inflater.inflate(R.layout.fooditemlist,null);
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.name=(TextView)rowView.findViewById(R.id.titleTextView);
             viewHolder.price=(TextView)rowView.findViewById(R.id.priceTextView);
             viewHolder.qty=(TextView)rowView.findViewById(R.id.quantityTextView);
             rowView.setTag(viewHolder);
         }
-        final FoodItem item = getItem(position);
-        ImageButton imageButton = (ImageButton) rowView.findViewById(R.id.imageButton);
+
         final ViewHolder viewHolder = (ViewHolder)rowView.getTag();
+        final FoodItem item = getItem(position);
 
 
-
-            imageButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    try {
-                        if((item.inCartQuantity)<(item.quantity)) {
-                            (item.inCartQuantity)++;
-                            viewHolder.qty.setText(Integer.toString(item.inCartQuantity));
-                        }
-
-                        else
-                            Log.d("Adapter","Max quantity reached");
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
 
 
         viewHolder.name.setText(item.name);

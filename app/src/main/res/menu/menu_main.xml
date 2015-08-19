@@ -1,14 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.sankarmanoj.thefoodkingapp.MainActivity">
+    tools:context="com.example.sankarmanoj.thefoodkingapp.MainActivity"
+    >
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:orderInCategory="100" app:showAsAction="ifRoom" />
 
     <item android:id="@+id/checkout"
-        android:title="C"
-        android:icon="@drawable/ic_action_forward"
+        android:title="Che"
         app:showAsAction="always"
+        android:icon="@drawable/ic_action_cart"
+
 
         />
     <item android:id="@+id/logout" android:title="Logout"

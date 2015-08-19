@@ -26,7 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.DialogFragment;
-public class Login extends Activity {
+public class Login extends ActionBarActivity {
     Boolean registered=false;
     EditText EmailET;
     Dialog dialog;
