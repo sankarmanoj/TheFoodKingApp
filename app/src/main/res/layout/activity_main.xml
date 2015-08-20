@@ -10,10 +10,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView1"
+        android:textColor="#333333"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="10.0sp"
+        android:divider="#555555"
+        android:dividerHeight="0.1dp"
 
         />
 

@@ -1,12 +1,10 @@
 package com.example.sankarmanoj.thefoodkingapp;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -14,16 +12,17 @@ import java.util.List;
 /**
  * Created by sankarmanoj on 8/14/15.
  */
-public class DiffFoodArrayAdapter extends ArrayAdapter<FoodItem> {
+public class FoodCartArrayAdapter extends ArrayAdapter<FoodItem> {
     Context context;
     int resource;
     static class ViewHolder {
         public TextView price;
         public TextView name;
-        public TextView qty;
+        public TextView quantity;
+        public TextView total;
     }
 
-    public DiffFoodArrayAdapter(Context context, int resource, List<FoodItem> objects) {
+    public FoodCartArrayAdapter(Context context, int resource, List<FoodItem> objects) {
 
         super(context, resource, objects);
         this.context = context;
@@ -36,11 +35,13 @@ public class DiffFoodArrayAdapter extends ArrayAdapter<FoodItem> {
         if(rowView==null)
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-            rowView=inflater.inflate(R.layout.fooditemlist1,null);
+            rowView=inflater.inflate(R.layout.foodcartitem,null);
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.name=(TextView)rowView.findViewById(R.id.titleTextView);
             viewHolder.price=(TextView)rowView.findViewById(R.id.priceTextView);
-            viewHolder.qty=(TextView)rowView.findViewById(R.id.totalPrice);
+            viewHolder.quantity=(TextView)rowView.findViewById(R.id.quantityTextView);
+            viewHolder.total=(TextView)rowView.findViewById(R.id.totalTextView);
+
             rowView.setTag(viewHolder);
         }
 
@@ -52,7 +53,8 @@ public class DiffFoodArrayAdapter extends ArrayAdapter<FoodItem> {
 
         viewHolder.name.setText(item.name);
         viewHolder.price.setText(item.getPrice());
-        viewHolder.qty.setText(Integer.toString((item.inCartQuantity)*(item.price)));
+        viewHolder.quantity.setText(String.valueOf(item.inCartQuantity));
+        viewHolder.total.setText("₹"+Integer.toString((item.inCartQuantity) * (item.price)));
         return rowView;
     }
 }

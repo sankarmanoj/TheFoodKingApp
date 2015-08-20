@@ -5,24 +5,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by prudhvirampey on 18/08/15.
@@ -30,7 +20,7 @@ import java.util.TimerTask;
 public class FoodCart extends Activity {
     List<FoodItem> tempList;
     ListView listView;
-    DiffFoodArrayAdapter foodArrayAdapter;
+    FoodCartArrayAdapter foodArrayAdapter;
     public final String TAG="FoodCart";
 
     @Override
@@ -55,14 +45,14 @@ public class FoodCart extends Activity {
 if(((tempList.get(i)).inCartQuantity)==0)
     tempList.remove(i);
         }
-        setContentView(R.layout.foodcart);
+        setContentView(R.layout.activity_foodcart);
 
         listView=(ListView)findViewById(R.id.listView2);
         if(listView==null)
         {
             Log.i(TAG, "List View is null");
         }
-        foodArrayAdapter = new DiffFoodArrayAdapter(getApplicationContext(),R.layout.fooditemlist1,tempList);
+        foodArrayAdapter = new FoodCartArrayAdapter(getApplicationContext(),R.layout.fooditemlist,tempList);
         if(foodArrayAdapter==null)
         {
             Log.i(TAG,"Food Array is null");

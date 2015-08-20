@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -110,6 +111,7 @@ public class JSONServerComm extends AsyncTask<JSONObject,String,JSONObject>{
         }
         catch (IOException e)
         {
+            Toast.makeText(context.getApplicationContext(),"Server is not responding",Toast.LENGTH_LONG).show();
             e.printStackTrace();
             Log.i(TAG,"Error Connecting to Server");
         }
