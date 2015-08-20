@@ -35,7 +35,7 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
         if(rowView==null)
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-            rowView=inflater.inflate(R.layout.fooditemlist1,null);
+            rowView=inflater.inflate(R.layout.fooditemlist,null);
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.name=(TextView)rowView.findViewById(R.id.titleTextView);
             viewHolder.price=(TextView)rowView.findViewById(R.id.priceTextView);

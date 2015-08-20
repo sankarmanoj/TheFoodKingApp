@@ -26,7 +26,8 @@
         </activity>
         <activity
             android:name=".FoodCart"
-            android:label="FoodCart" >
+            android:label="FoodCart"
+            android:parentActivityName=".MainActivity">
         </activity>
     </application>
 

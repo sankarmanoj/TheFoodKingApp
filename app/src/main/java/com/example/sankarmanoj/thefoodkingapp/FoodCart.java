@@ -1,5 +1,6 @@
 package com.example.sankarmanoj.thefoodkingapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,6 +46,8 @@ public class FoodCart extends Activity {
 
 
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         if(tempList==null)
             Log.d(TAG,"Damn!");
         for(int i=0;i<(tempList.size());i++)

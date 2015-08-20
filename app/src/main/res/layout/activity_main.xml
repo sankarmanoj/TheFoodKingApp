@@ -11,7 +11,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/listView1"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"
+
+        />
 
     <TextView
         android:layout_width="wrap_content"

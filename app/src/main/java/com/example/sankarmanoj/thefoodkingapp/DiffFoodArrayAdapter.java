@@ -36,11 +36,11 @@ public class DiffFoodArrayAdapter extends ArrayAdapter<FoodItem> {
         if(rowView==null)
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-            rowView=inflater.inflate(R.layout.fooditemlist,null);
+            rowView=inflater.inflate(R.layout.fooditemlist1,null);
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.name=(TextView)rowView.findViewById(R.id.titleTextView);
             viewHolder.price=(TextView)rowView.findViewById(R.id.priceTextView);
-            viewHolder.qty=(TextView)rowView.findViewById(R.id.quantityTextView);
+            viewHolder.qty=(TextView)rowView.findViewById(R.id.totalPrice);
             rowView.setTag(viewHolder);
         }
 
@@ -52,7 +52,7 @@ public class DiffFoodArrayAdapter extends ArrayAdapter<FoodItem> {
 
         viewHolder.name.setText(item.name);
         viewHolder.price.setText(item.getPrice());
-        viewHolder.qty.setText(Integer.toString(item.inCartQuantity));
+        viewHolder.qty.setText(Integer.toString((item.inCartQuantity)*(item.price)));
         return rowView;
     }
 }

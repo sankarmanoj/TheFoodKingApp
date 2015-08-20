@@ -8,7 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
+
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
@@ -26,7 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.DialogFragment;
-public class Login extends ActionBarActivity {
+public class Login extends Activity {
     Boolean registered=false;
     EditText EmailET;
     Dialog dialog;
