@@ -57,7 +57,9 @@ public class Login extends Activity {
                 public void onClick(DialogInterface dialog, int which) {
                     registered=true;
                     Log.d(TAG,String.valueOf(registered));
+                    RegisterButton.setText("Login");
                     ConfirmPass.setVisibility(View.INVISIBLE);
+                    NameET.setVisibility(View.INVISIBLE);
                     dialog.dismiss();
                 }
             });
@@ -227,48 +229,53 @@ public class Login extends Activity {
         @Override
         protected void onPostExecute(JSONObject jsonObject) {
             super.onPostExecute(jsonObject);
-            try
+            if(jsonObject==null)
             {
-                if(jsonObject.getString("state").equals("logged-in"))
+                Toast.makeText(getApplicationContext(),"Error Communicating With Server \n Please try again later",Toast.LENGTH_SHORT).show();
+            }
+            else
+                try
                 {
-                    String uid = jsonObject.getString("uid");
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    sharedPreferences.edit().putString("uid",uid).apply();
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    startActivity(intent);
+                    if(jsonObject.getString("state").equals("logged-in"))
+                    {
+                        String uid = jsonObject.getString("uid");
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        sharedPreferences.edit().putString("uid",uid).apply();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(intent);
 
-                }
-                else if (jsonObject.getString("state").equals("password-error"))
-                {
-                    Toast.makeText(getApplicationContext(),"Password is incorrect",Toast.LENGTH_LONG).show();
-                    register.setEnabled(true);
-                }
-                else if(jsonObject.getString("state").equals("not-registered"))
-                {
-                    Toast.makeText(getApplicationContext(),"User does not exist",Toast.LENGTH_LONG).show();
-                    register.setEnabled(true);
-                    registered=false;
-                    ConfirmPass.setVisibility(View.VISIBLE);
-                    ConfirmPass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View v, boolean hasFocus) {
-                            if (hasFocus) {
-                                ConfirmPass.setText("");
-                                ConfirmPass.setOnFocusChangeListener(null);
-                                ConfirmPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                                ConfirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    }
+                    else if (jsonObject.getString("state").equals("password-error"))
+                    {
+                        Toast.makeText(getApplicationContext(),"Password is incorrect",Toast.LENGTH_LONG).show();
+                        register.setEnabled(true);
+                    }
+                    else if(jsonObject.getString("state").equals("not-registered"))
+                    {
+                        Toast.makeText(getApplicationContext(),"User does not exist",Toast.LENGTH_LONG).show();
+                        register.setEnabled(true);
+                        registered=false;
+                        ConfirmPass.setVisibility(View.VISIBLE);
+                        ConfirmPass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                            @Override
+                            public void onFocusChange(View v, boolean hasFocus) {
+                                if (hasFocus) {
+                                    ConfirmPass.setText("");
+                                    ConfirmPass.setOnFocusChangeListener(null);
+                                    ConfirmPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                                    ConfirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
-            }
-            catch (JSONException e)
-            {
-                e.printStackTrace();
-            }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
         }
     }
     public class RegisterServerComm extends JSONServerComm
@@ -283,34 +290,36 @@ public class Login extends Activity {
         @Override
         protected void onPostExecute(JSONObject jsonObject) {
             super.onPostExecute(jsonObject);
-            try {
-                if (jsonObject.get("state").equals("success"))
-                {
-                    String uid=jsonObject.getString("uid");
-                    SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
-                    sharedPreferences.edit().putString("uid",uid).apply();
-                    Intent intent = new Intent(context.getApplicationContext(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    context.startActivity(intent);
-                    if (activity!=null)
-                    {
-                        activity.finish();
-                    }
-
-                }
-                else if(jsonObject.get("state").equals("email-error"))
-                {
-                    Toast.makeText(context,"Error in sending registration mail",Toast.LENGTH_LONG).show();
-                    register.setEnabled(true);
-                }
-            }
-            catch (Exception e)
+            if(jsonObject==null)
             {
-                register.setEnabled(true);
-
-                e.printStackTrace();
+                Toast.makeText(getApplicationContext(),"Error Communicating With Server \n Please try again later",Toast.LENGTH_SHORT).show();
             }
+            else
+                try {
+                    if (jsonObject.get("state").equals("success"))
+                    {
+                        String uid=jsonObject.getString("uid");
+                        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
+                        sharedPreferences.edit().putString("uid",uid).apply();
+                        Intent intent = new Intent(context.getApplicationContext(), MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                    else if(jsonObject.get("state").equals("email-error"))
+                    {
+                        Toast.makeText(context,"Error in sending registration mail",Toast.LENGTH_LONG).show();
+                        register.setEnabled(true);
+                    }
+                }
+                catch (Exception e)
+                {
+                    register.setEnabled(true);
+
+                    e.printStackTrace();
+                }
         }
 
     }

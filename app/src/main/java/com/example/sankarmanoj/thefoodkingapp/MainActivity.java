@@ -1,37 +1,26 @@
 package com.example.sankarmanoj.thefoodkingapp;
 
-import android.app.ActionBar;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 public class MainActivity extends Activity {
-    Button checkOut;
     ListView listView;
     Menu MainMenu;
     TextView ErrorView;
@@ -144,16 +133,7 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
         this.MainMenu=menu;
-        menuItem= MainMenu.add("Verify");
 
-
-        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                FoodKing.singleton.updateRegistrationState();
-                return true;
-            }
-        });
         inflater.inflate(R.menu.menu_main, menu);
 
         return true;
@@ -185,7 +165,8 @@ else if(id==R.id.checkout)
             }
             else
             {
-                Toast.makeText(getApplicationContext(),"Please confirm registration before placing orders",Toast.LENGTH_LONG).show();
+                FoodKing.singleton.updateRegistrationState();
+                Toast.makeText(getApplicationContext(),"Not Registered with Server\n Rechecking ...",Toast.LENGTH_SHORT).show();
             }
         }
         return super.onOptionsItemSelected(item);

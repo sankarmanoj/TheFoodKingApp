@@ -100,8 +100,19 @@ public class JSONServerComm extends AsyncTask<JSONObject,String,JSONObject>{
             while ((inputLine = in.readLine()) != null) {
                 result += inputLine;
             }
+            JSONObject replyFromServer=null;
+            try {
 
+                replyFromServer = new JSONObject(result);
+            }
+            catch(JSONException e)
+            {
+                e.printStackTrace();
+                Log.i(TAG,"JSON Error in parsing reply");
+            }
             Log.i(TAG,result);
+            return replyFromServer;
+
 
         }
         catch (MalformedURLException e)
@@ -111,7 +122,7 @@ public class JSONServerComm extends AsyncTask<JSONObject,String,JSONObject>{
         }
         catch (IOException e)
         {
-            Toast.makeText(context.getApplicationContext(),"Server is not responding",Toast.LENGTH_LONG).show();
+
             e.printStackTrace();
             Log.i(TAG,"Error Connecting to Server");
         }
@@ -124,20 +135,9 @@ public class JSONServerComm extends AsyncTask<JSONObject,String,JSONObject>{
         {
             e.printStackTrace();
         }
+        return null;
 
 
-        JSONObject replyFromServer=null;
-        try {
-
-            replyFromServer = new JSONObject(result);
-        }
-        catch(JSONException e)
-        {
-            e.printStackTrace();
-            Log.i(TAG,"JSON Error in parsing reply");
-        }
-
-        return replyFromServer;
     }
     private static final char PARAMETER_DELIMITER = '&';
     private static final char PARAMETER_EQUALS_CHAR = '=';

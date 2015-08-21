@@ -69,37 +69,43 @@ public class FoodKing extends Application {
         protected void onPostExecute(JSONObject jsonObject) {
             super.onPostExecute(jsonObject);
             List<FoodItem> items = new ArrayList<>();
-            try
+            if(jsonObject==null)
             {
-                if(jsonObject.get("state").equals("got-menu"))
+                Toast.makeText(getApplicationContext(),"Error Communicating With Server \n Please try again later",Toast.LENGTH_SHORT).show();
+            }
+            else
+                try
                 {
-                    JSONArray menu=jsonObject.getJSONArray("menu");
-                    for(int i=0;i<menu.length();i++)
+                    if(jsonObject.get("state").equals("got-menu"))
                     {
-                        JSONObject item = menu.getJSONObject(i);
-                        items.add(new FoodItem(item.getString("name"),Integer.parseInt(item.getString("price")),Integer.parseInt(item.getString("quantity"))));
+                        JSONArray menu=jsonObject.getJSONArray("menu");
+                        for(int i=0;i<menu.length();i++)
+                        {
+                            JSONObject item = menu.getJSONObject(i);
+                            items.add(new FoodItem(item.getString("name"),Integer.parseInt(item.getString("price")),Integer.parseInt(item.getString("quantity"))));
+
+                        }
+                        FoodMenu=items;
+                        gotMenu=true;
+
+
+                        Log.d("MainActivity", "got items");
+                        Log.d("MainActivity",items.toString());
 
                     }
-                    FoodMenu=items;
-                    gotMenu=true;
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), "Unknown error in loading menu. Please contact the administrator", Toast.LENGTH_LONG).show();
+                        Log.e("Menu Loader","Returned Error");
+                    }
 
-
-                    Log.d("MainActivity", "got items");
-                    Log.d("MainActivity",items.toString());
 
                 }
-                else
+                catch (Exception e)
                 {
-                    Toast.makeText(getApplicationContext(), "Unknown error in loading menu. Please contact the administrator", Toast.LENGTH_LONG).show();
-                    Log.e("Menu Loader","Returned Error");
+                    e.printStackTrace();
                 }
 
-
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
         }
     }
     public class CheckRegistration extends JSONServerComm
