@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
     public final String TAG="MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         uid = sharedPreferences.getString("uid","null");
         if (uid.equals("null"))

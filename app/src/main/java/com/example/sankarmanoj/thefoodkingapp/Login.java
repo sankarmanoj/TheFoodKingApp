@@ -39,7 +39,9 @@ public class Login extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
         String uid = sharedPreferences.getString("uid","null");
         if (!uid.equals("null"))
         {
