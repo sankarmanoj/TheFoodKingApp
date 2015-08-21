@@ -19,7 +19,7 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
     static class ViewHolder {
         public TextView price;
         public TextView name;
-        public TextView qty;
+        public TextView quantity;
     }
 
     public FoodArrayAdapter(Context context, int resource, List<FoodItem> objects) {
@@ -39,39 +39,47 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.name=(TextView)rowView.findViewById(R.id.titleTextView);
             viewHolder.price=(TextView)rowView.findViewById(R.id.priceTextView);
-            viewHolder.qty=(TextView)rowView.findViewById(R.id.quantityTextView);
+            viewHolder.quantity=(TextView)rowView.findViewById(R.id.quantityTextView);
             rowView.setTag(viewHolder);
         }
         final FoodItem item = getItem(position);
-        ImageButton imageButton = (ImageButton) rowView.findViewById(R.id.imageButton);
+        ImageButton plusButton = (ImageButton) rowView.findViewById(R.id.plusImageButton);
+        ImageButton minusButton = (ImageButton)rowView.findViewById(R.id.minusImageButton);
         final ViewHolder viewHolder = (ViewHolder)rowView.getTag();
 
 
 
-            imageButton.setOnClickListener(new View.OnClickListener() {
+            plusButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
 
                     try {
-                        if((item.inCartQuantity)<(item.quantity)) {
+                        if ((item.inCartQuantity) < (item.quantity)) {
                             (item.inCartQuantity)++;
-                            viewHolder.qty.setText(Integer.toString(item.inCartQuantity));
-                        }
-
-                        else
-                            Log.d("Adapter","Max quantity reached");
+                            viewHolder.quantity.setText(Integer.toString(item.inCartQuantity));
+                        } else
+                            Log.d("Adapter", "Max quantity reached");
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
-
+         minusButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 if(item.inCartQuantity>0)
+                 {
+                     item.inCartQuantity--;
+                     viewHolder.quantity.setText(Integer.toString(item.inCartQuantity));
+                 }
+             }
+         });
 
         viewHolder.name.setText(item.name);
         viewHolder.price.setText("₹"+item.getPrice());
-        viewHolder.qty.setText(Integer.toString(item.inCartQuantity));
+        viewHolder.quantity.setText(Integer.toString(item.inCartQuantity));
         return rowView;
     }
 }

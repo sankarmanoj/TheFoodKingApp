@@ -29,7 +29,9 @@ public class FoodCart extends Activity {
         List<FoodItem> list=FoodKing.FoodMenu;
         if((list)!=null) {
             for (int i = 0; i < (list.size()); i++) {
-                tempList.add(list.get(i));
+                if(list.get(i).inCartQuantity>0) {
+                    tempList.add(list.get(i));
+                }
             }
         }
 
@@ -38,29 +40,10 @@ public class FoodCart extends Activity {
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        if(tempList==null)
-            Log.d(TAG,"Damn!");
-        for(int i=0;i<(tempList.size());i++)
-        {
-if(((tempList.get(i)).inCartQuantity)==0)
-    tempList.remove(i);
-        }
         setContentView(R.layout.activity_foodcart);
-
         listView=(ListView)findViewById(R.id.listView2);
-        if(listView==null)
-        {
-            Log.i(TAG, "List View is null");
-        }
         foodArrayAdapter = new FoodCartArrayAdapter(getApplicationContext(),R.layout.fooditemlist,tempList);
-        if(foodArrayAdapter==null)
-        {
-            Log.i(TAG,"Food Array is null");
-        }
-
-
-
-                listView.setAdapter(foodArrayAdapter);
+        listView.setAdapter(foodArrayAdapter);
 
 
 

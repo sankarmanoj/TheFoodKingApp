@@ -52,7 +52,7 @@ public class FoodCartArrayAdapter extends ArrayAdapter<FoodItem> {
 
 
         viewHolder.name.setText(item.name);
-        viewHolder.price.setText(item.getPrice());
+        viewHolder.price.setText("₹"+item.getPrice());
         viewHolder.quantity.setText(String.valueOf(item.inCartQuantity));
         viewHolder.total.setText("₹"+Integer.toString((item.inCartQuantity) * (item.price)));
         return rowView;

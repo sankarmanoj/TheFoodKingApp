@@ -48,13 +48,25 @@
         android:layout_width="fill_parent"
         android:layout_weight="2"
         android:layout_height="90dp">
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/minusImageButton"
+            android:background="@drawable/ic_action_minus"
+
+            android:layout_alignRight="@+id/quantityTextView"
+            android:layout_alignBottom="@+id/quantityTextView"
+            android:layout_marginRight="13dp"
+
+
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:text="New Text"
+            android:text="12"
             android:textColor="#222222"
-            android:layout_toLeftOf="@+id/imageButton"
-            android:layout_alignBottom="@+id/imageButton"
+            android:layout_toLeftOf="@+id/plusImageButton"
+            android:layout_alignBottom="@+id/plusImageButton"
             android:id="@+id/quantityTextView"
             android:textSize="13dp"
             android:layout_marginLeft="10dp"
@@ -64,7 +76,7 @@
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/imageButton"
+            android:id="@+id/plusImageButton"
             android:background="@drawable/ic_action_plus"
             android:layout_alignParentRight="true"
             android:layout_marginTop="30dp"

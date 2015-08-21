@@ -21,7 +21,7 @@ public class FoodKing extends Application {
     public void onCreate() {
         super.onCreate();
         FoodMenu=new ArrayList<>();
-        Log.d("Whatthefuck","Running menu loader");
+
         LoadMenu loadMenu  = new LoadMenu();
         try {
             JSONObject toSend = new JSONObject();
