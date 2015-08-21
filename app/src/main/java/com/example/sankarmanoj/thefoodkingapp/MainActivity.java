@@ -33,8 +33,9 @@ import java.util.TimerTask;
 public class MainActivity extends Activity {
     Button checkOut;
     ListView listView;
-
+    Menu MainMenu;
     TextView ErrorView;
+    MenuItem menuItem;
     String uid;
     Handler handler;
     FoodArrayAdapter foodArrayAdapter;
@@ -58,41 +59,9 @@ public class MainActivity extends Activity {
         ErrorView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckRegistration checkRegistration = new CheckRegistration();
-                try {
-                    JSONObject toSend = new JSONObject();
-                    toSend.put("type","check-registration");
-                    toSend.put("uid",uid);
-                    checkRegistration.execute(toSend);
-                    ErrorView.setVisibility(View.INVISIBLE);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
+
             }
         });
-        listView=(ListView)findViewById(R.id.listView1);
-        if(listView==null)
-        {
-            Log.i(TAG,"List View is null");
-        }
-
-        if(foodArrayAdapter==null)
-        {
-            Log.i(TAG,"Food Array is null");
-        }
-        CheckRegistration checkRegistration = new CheckRegistration();
-        try {
-            JSONObject toSend = new JSONObject();
-            toSend.put("type","check-registration");
-            toSend.put("uid",uid);
-            checkRegistration.execute(toSend);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
         handler = new Handler()
         {
             @Override
@@ -101,6 +70,68 @@ public class MainActivity extends Activity {
                 listView.setAdapter(foodArrayAdapter);
             }
         };
+
+        listView=(ListView)findViewById(R.id.listView1);
+        final Timer t = new Timer();
+        t.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (FoodKing.gotMenu)
+                {
+                    foodArrayAdapter = new FoodArrayAdapter(getApplicationContext(),R.layout.fooditemlist,FoodKing.FoodMenu);
+                    handler.sendEmptyMessage(1);
+                    t.cancel();
+
+                }
+            }
+        },100,1000);
+        final Timer t2 = new Timer();
+        t.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+
+                  switch (FoodKing.registrationState)
+                  {
+                      case 0:
+                          break;
+                      case 1:
+                          if(menuItem!=null)
+                          {
+                              menuItem.setVisible(false);
+                              invalidateOptionsMenu();
+                              Toast.makeText(getApplicationContext(),"Successfully Registered",Toast.LENGTH_SHORT).show();
+                          }
+                          t2.cancel();
+                          break;
+                      case 2:
+
+                          menuItem= MainMenu.add("Verify");
+
+
+                          menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                              @Override
+                              public boolean onMenuItemClick(MenuItem item) {
+                                FoodKing.singleton.updateRegistrationState();
+                                  return true;
+                              }
+                          });
+                            invalidateOptionsMenu();
+                          t2.cancel();
+                          break;
+                      case 3:
+                          Toast.makeText(getApplicationContext(),"User doesn't exist. Please re-register.",Toast.LENGTH_LONG).show();
+                          PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().remove("uid").apply();
+                          Intent intent = new Intent(getApplicationContext(),Login.class);
+                          startActivity(intent);
+                          finish();
+                          t2.cancel();
+                          break;
+                  }
+
+            }
+        },100,1000);
+
+
 
 
 
@@ -112,7 +143,19 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
+        this.MainMenu=menu;
+        menuItem= MainMenu.add("Verify");
+
+
+        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                FoodKing.singleton.updateRegistrationState();
+                return true;
+            }
+        });
         inflater.inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
@@ -136,58 +179,18 @@ public class MainActivity extends Activity {
         }
 else if(id==R.id.checkout)
         {
-            Intent i = new Intent(getApplicationContext(), FoodCart.class);
-            startActivity(i);
+            if(FoodKing.registrationState==1) {
+                Intent i = new Intent(getApplicationContext(), FoodCart.class);
+                startActivity(i);
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(),"Please confirm registration before placing orders",Toast.LENGTH_LONG).show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
-    public class CheckRegistration extends JSONServerComm
-    {
 
-
-        @Override
-        protected void onPostExecute(JSONObject jsonObject) {
-              super.onPostExecute(jsonObject);
-               try
-               {
-                   if(jsonObject.get("state").equals("registered"))
-                   {
-                       final Timer t = new Timer();
-                       t.scheduleAtFixedRate(new TimerTask() {
-                           @Override
-                           public void run() {
-                               if (FoodKing.gotMenu)
-                               {
-                                   foodArrayAdapter = new FoodArrayAdapter(getApplicationContext(),R.layout.fooditemlist,FoodKing.FoodMenu);
-                                   handler.sendEmptyMessage(1);
-                                   t.cancel();
-
-                               }
-                           }
-                       },0,1000);
-                   }
-                   else if(jsonObject.get("state").equals("does-not-exist"))
-                   {
-                       Toast.makeText(getApplicationContext(),"User doesn't exist. Please re-register.",Toast.LENGTH_LONG).show();
-                       PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().remove("uid").apply();
-                       Intent intent = new Intent(getApplicationContext(),Login.class);
-                       startActivity(intent);
-                       finish();
-                   }
-                   else
-                   {
-                       Toast.makeText(getApplicationContext(),"Not Registered with Server",Toast.LENGTH_LONG).show();
-                       ErrorView.setText("Click on the link sent to the registered email address");
-                       ErrorView.setVisibility(View.VISIBLE);
-                   }
-
-               }
-               catch (Exception e)
-               {
-
-               }
-        }
-    }
 
 
 }

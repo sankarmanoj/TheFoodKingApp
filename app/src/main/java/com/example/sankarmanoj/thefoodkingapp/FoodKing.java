@@ -1,7 +1,11 @@
 package com.example.sankarmanoj.thefoodkingapp;
 
 import android.app.Application;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -9,6 +13,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by sankarmanoj on 8/18/15.
@@ -16,10 +22,14 @@ import java.util.List;
 public class FoodKing extends Application {
     static List<FoodItem> FoodMenu;
     static Boolean gotMenu=false;
+    static int registrationState = 0;
+   public static FoodKing singleton;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        String uid;
+        singleton=this;
         FoodMenu=new ArrayList<>();
 
         LoadMenu loadMenu  = new LoadMenu();
@@ -32,8 +42,27 @@ public class FoodKing extends Application {
         {
             e.printStackTrace();
         }
-    }
 
+        updateRegistrationState();
+    }
+    public FoodKing getInstance()
+    {
+        return singleton;
+    }
+    public void updateRegistrationState()
+    {      SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+       String uid = sharedPreferences.getString("uid","null");
+        CheckRegistration checkRegistration = new CheckRegistration();
+        try {
+            JSONObject toSend = new JSONObject();
+            toSend.put("type", "check-registration");
+            toSend.put("uid", uid);
+            checkRegistration.execute(toSend);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public class LoadMenu extends JSONServerComm
     {
         @Override
@@ -69,6 +98,40 @@ public class FoodKing extends Application {
             }
             catch (Exception e)
             {
+                e.printStackTrace();
+            }
+        }
+    }
+    public class CheckRegistration extends JSONServerComm
+    {
+
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            super.onPostExecute(jsonObject);
+            try
+            {
+                if(jsonObject.get("state").equals("registered"))
+                {
+                   registrationState=1;
+                }
+                else if(jsonObject.get("state").equals("does-not-exist"))
+                {
+                    registrationState=3;
+
+
+                }
+                else
+                {
+                    registrationState=2;
+                    Toast.makeText(getApplicationContext(),"Not Registered with Server",Toast.LENGTH_LONG).show();
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                registrationState=2;
                 e.printStackTrace();
             }
         }
