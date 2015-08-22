@@ -30,14 +30,6 @@ public class FoodKing extends Application {
         super.onCreate();
         singleton=this;
         FoodMenu=new ArrayList<>();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        if(!sharedPreferences.getBoolean("FabIntro-flag",false)) {
-            editor.putBoolean("FabIntro-flag", true).apply();
-            Intent in=new Intent(getApplicationContext(),FabIntro.class);
-            in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(in);
-        }
 
         LoadMenu loadMenu  = new LoadMenu();
         try {
@@ -52,11 +44,9 @@ public class FoodKing extends Application {
 
         updateRegistrationState();
     }
-
+   
     public void updateRegistrationState()
     {      SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-
        String uid = sharedPreferences.getString("uid","null");
         CheckRegistration checkRegistration = new CheckRegistration();
         try {
