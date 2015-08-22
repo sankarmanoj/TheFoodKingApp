@@ -36,6 +36,11 @@ public class Login extends Activity {
     EditText ConfirmPass;
     public final String TAG="LoginActivity";
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        RegisterButton.setEnabled(true);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,6 +249,7 @@ public class Login extends Activity {
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         sharedPreferences.edit().putString("uid",uid).apply();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        FoodKing.registrationState=1;
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                         startActivity(intent);

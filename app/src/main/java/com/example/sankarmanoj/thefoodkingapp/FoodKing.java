@@ -28,7 +28,6 @@ public class FoodKing extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        String uid;
         singleton=this;
         FoodMenu=new ArrayList<>();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -53,10 +52,7 @@ public class FoodKing extends Application {
 
         updateRegistrationState();
     }
-    public FoodKing getInstance()
-    {
-        return singleton;
-    }
+
     public void updateRegistrationState()
     {      SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
@@ -140,7 +136,7 @@ public class FoodKing extends Application {
                 else
                 {
                     registrationState=2;
-                    Toast.makeText(getApplicationContext(),"Not Registered with Server",Toast.LENGTH_LONG).show();
+
 
                 }
 

@@ -83,7 +83,6 @@ public class JSONServerComm extends AsyncTask<JSONObject,String,JSONObject>{
             connection.setConnectTimeout(7000);
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
-            HttpPost post = new HttpPost(URI.create(url.toString()));
             String postParameters=createQueryStringForParameters(params[0]);
             connection.setFixedLengthStreamingMode(postParameters.getBytes().length);
             connection.connect();

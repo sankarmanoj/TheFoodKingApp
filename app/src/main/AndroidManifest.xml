@@ -28,11 +28,7 @@
             android:label="FoodCart"
             android:parentActivityName=".MainActivity" >
         </activity>
-        <activity
-            android:name=".FabIntro"
-            android:label="@string/title_activity_fab_intro" >
 
-        </activity>
     </application>
 
 </manifest>

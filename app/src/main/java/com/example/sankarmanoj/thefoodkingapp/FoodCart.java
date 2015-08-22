@@ -7,9 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +26,7 @@ public class FoodCart extends Activity {
     List<FoodItem> tempList;
     ListView listView;
     FoodCartArrayAdapter foodArrayAdapter;
+    Button Checkout;
     public final String TAG="FoodCart";
 
     @Override
@@ -34,16 +40,27 @@ public class FoodCart extends Activity {
                 }
             }
         }
-
-
-
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_foodcart);
+
+
         listView=(ListView)findViewById(R.id.listView2);
         foodArrayAdapter = new FoodCartArrayAdapter(getApplicationContext(),R.layout.fooditemlist,tempList);
         listView.setAdapter(foodArrayAdapter);
+        Checkout=(Button)findViewById(R.id.checkoutButton);
+        Checkout.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)  listView.getLayoutParams();
+                int pixels = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
+                params.setMargins(0,0,0,pixels);
+                listView.setLayoutParams(params);
+
+                Log.i("FoodCart","Checkout Clicked");
+            }
+        });
 
 
 

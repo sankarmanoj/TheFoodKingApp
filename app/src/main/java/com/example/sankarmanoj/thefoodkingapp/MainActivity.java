@@ -24,9 +24,11 @@ public class MainActivity extends Activity {
     ListView listView;
     Menu MainMenu;
     TextView ErrorView;
-    MenuItem menuItem;
     String uid;
+    Message msg;
+    Timer t2;
     Handler handler;
+    Handler ToastHandler;
     FoodArrayAdapter foodArrayAdapter;
     public final String TAG="MainActivity";
     @Override
@@ -60,6 +62,15 @@ public class MainActivity extends Activity {
                 listView.setAdapter(foodArrayAdapter);
             }
         };
+        ToastHandler = new Handler()
+        {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                String toShow = (String)msg.obj;
+                Toast.makeText(getApplicationContext(),toShow,Toast.LENGTH_SHORT).show();
+            }
+        };
 
         listView=(ListView)findViewById(R.id.listView1);
         final Timer t = new Timer();
@@ -75,51 +86,9 @@ public class MainActivity extends Activity {
                 }
             }
         },100,1000);
-        final Timer t2 = new Timer();
-        t.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
+        t2 = new Timer(true);
 
-                  switch (FoodKing.registrationState)
-                  {
-                      case 0:
-                          break;
-                      case 1:
-                          if(menuItem!=null)
-                          {
-                              menuItem.setVisible(false);
-                              invalidateOptionsMenu();
-                              Toast.makeText(getApplicationContext(),"Successfully Registered",Toast.LENGTH_SHORT).show();
-                          }
-                          t2.cancel();
-                          break;
-                      case 2:
-
-                          menuItem= MainMenu.add("Verify");
-
-
-                          menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                              @Override
-                              public boolean onMenuItemClick(MenuItem item) {
-                                FoodKing.singleton.updateRegistrationState();
-                                  return true;
-                              }
-                          });
-                            invalidateOptionsMenu();
-                          t2.cancel();
-                          break;
-                      case 3:
-                          Toast.makeText(getApplicationContext(),"User doesn't exist. Please re-register.",Toast.LENGTH_LONG).show();
-                          PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().remove("uid").apply();
-                          Intent intent = new Intent(getApplicationContext(),Login.class);
-                          startActivity(intent);
-                          finish();
-                          t2.cancel();
-                          break;
-                  }
-
-            }
-        },100,1000);
+        t2.scheduleAtFixedRate(new checkRegTimer(),10,100);
 
 
 
@@ -128,7 +97,42 @@ public class MainActivity extends Activity {
 
     }
 
+    public class checkRegTimer extends TimerTask {
+        @Override
+        public void run() {
 
+            switch (FoodKing.registrationState)
+            {
+                case 0:
+                    break;
+                case 1:
+
+
+
+                    t2.cancel();
+                    break;
+                case 2:
+
+                    msg = new Message();
+                    msg.obj=new String("Still not registered \n Click on link sent to your email");
+                    ToastHandler.sendMessage(msg);
+                    t2.cancel();
+                    break;
+                case 3:
+
+                    msg = new Message();
+                    msg.obj=new String("User doesn't exist. Please re-register.");
+                    ToastHandler.sendMessage(msg);
+                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().remove("uid").apply();
+                    Intent intent = new Intent(getApplicationContext(),Login.class);
+                    startActivity(intent);
+                    finish();
+                    t2.cancel();
+                    break;
+            }
+
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -168,6 +172,10 @@ else if(id==R.id.checkout)
             {
                 FoodKing.singleton.updateRegistrationState();
                 Toast.makeText(getApplicationContext(),"Not Registered with Server\n Rechecking ...",Toast.LENGTH_SHORT).show();
+
+                    t2 = new Timer(true);
+                    t2.scheduleAtFixedRate(new checkRegTimer(), 100, 500);
+
             }
         }
         return super.onOptionsItemSelected(item);
