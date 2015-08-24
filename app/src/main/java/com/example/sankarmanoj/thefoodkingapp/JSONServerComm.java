@@ -68,8 +68,7 @@ public class JSONServerComm extends AsyncTask<JSONObject,String,JSONObject>{
     @Override
     protected JSONObject doInBackground(JSONObject... params) {
         String result= new String();
-        String error=new String();
-        HttpsURLConnection connection=null;
+        HttpsURLConnection connection;
         try {
             URL url = new URL("https://sankar-manoj.com/request/");
 
