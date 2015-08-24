@@ -28,7 +28,10 @@
             android:label="FoodCart"
             android:parentActivityName=".MainActivity" >
         </activity>
-
+        <activity
+            android:name=".Checkout"
+            android:label="@string/title_activity_checkout" >
+        </activity>
     </application>
 
 </manifest>
