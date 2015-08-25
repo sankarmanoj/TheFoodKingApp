@@ -37,7 +37,7 @@ import javax.net.ssl.SSLContext;
 /**
  * Created by sankarmanoj on 8/14/15.
  */
-public class JSONServerComm extends AsyncTask<JSONObject,String,JSONObject>{
+public class JSONServerComm extends AsyncTask<JSONObject,Integer,JSONObject>{
     public final String TAG="JSONServerComm";
     Context context;
     Activity activity;
@@ -64,6 +64,10 @@ public class JSONServerComm extends AsyncTask<JSONObject,String,JSONObject>{
 
     }
 
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
+    }
 
     @Override
     protected JSONObject doInBackground(JSONObject... params) {
@@ -85,6 +89,7 @@ public class JSONServerComm extends AsyncTask<JSONObject,String,JSONObject>{
             String postParameters=createQueryStringForParameters(params[0]);
             connection.setFixedLengthStreamingMode(postParameters.getBytes().length);
             connection.connect();
+            this.publishProgress(40);
             PrintWriter out = new PrintWriter(connection.getOutputStream());
             out.print(postParameters);
             out.close();

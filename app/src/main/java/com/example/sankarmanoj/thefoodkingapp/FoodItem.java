@@ -18,6 +18,11 @@ public class FoodItem {
         this.inCartQuantity=0;
         this.quantity=maxQty;
     }
+
+    public void setInCartQuantity(String inCartQuantity) {
+        this.inCartQuantity = Integer.parseInt(inCartQuantity);
+    }
+
     Kind TypeOfFood;
     int quantity;
     int inCartQuantity;

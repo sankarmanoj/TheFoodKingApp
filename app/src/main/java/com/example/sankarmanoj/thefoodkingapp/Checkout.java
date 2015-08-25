@@ -40,11 +40,12 @@ public class Checkout extends Activity {
     ProgressBar ServerProgressBar;
     Activity activity;
     TextView Status;
+    String uid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-        String uid;
+
         activity=this;
         Status=(TextView)findViewById(R.id.confirmOrderTextView);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -110,7 +111,50 @@ public class Checkout extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
-    public class SubmitOrder extends AsyncTask<JSONObject,Integer,JSONObject>
+    public class GetOrder extends JSONServerComm
+    {
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            super.onPostExecute(jsonObject);
+
+            if(jsonObject==null)
+            {
+                Toast.makeText(getApplicationContext(),"Error Communicating With Server \n Please try again later",Toast.LENGTH_SHORT).show();
+            }
+            else
+                try
+                {
+                    if(jsonObject.get("state").equals("got-order"))
+                    {
+                        if(!jsonObject.get("user").equals(uid))
+                        {
+                            throw new RuntimeException("User on device with uid = "+uid +" does not match returned uid of "+jsonObject.get("user"));
+                        }
+                        Intent toExistingOrder = new Intent(getApplicationContext(),ExistingOrder.class);
+                        toExistingOrder.putExtra("json-object",jsonObject.toString());
+                        finish();
+                        startActivity(toExistingOrder);
+
+
+
+
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), "Unknown error in loading menu. Please contact the administrator", Toast.LENGTH_LONG).show();
+                        Log.e("Menu Loader","Returned Error");
+                    }
+
+
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+
+        }
+    }
+    public class SubmitOrder extends JSONServerComm
     {
         @Override
         protected void onPostExecute(JSONObject jsonObject) {
@@ -145,11 +189,24 @@ public class Checkout extends Activity {
 
                   }
                 else if (jsonObject.get("state").equals("order-already-exists"))
-                  {
+                  {JSONObject jsonObject1 = new JSONObject();
+                      try
+                      {
+
+                          jsonObject1.put("type","get-order");
+                          jsonObject1.put("uid",uid);
+                      }
+                      catch (JSONException e)
+                      {
+                          e.printStackTrace();
+                      }
+                      GetOrder getOrder = new GetOrder();
+                      getOrder.execute(jsonObject1);
                       Toast.makeText(getApplicationContext(),"Order has already been placed",Toast.LENGTH_LONG).show();
-                      ServerProgressBar.setVisibility(View.INVISIBLE);
-                      Status.setText("Retriving Order");
+                      ServerProgressBar.setVisibility(View.VISIBLE);
+                      Status.setText("Retriving Order...");
                       ServerProgressBar.setProgress(0);
+
 
                   }
 
@@ -165,81 +222,7 @@ public class Checkout extends Activity {
 
         }
 
-        @Override
-        protected JSONObject doInBackground(JSONObject... params) {
-            String result= new String();
-            HttpsURLConnection connection;
-            try {
-                URL url = new URL("https://sankar-manoj.com/request/");
 
-
-                connection = (HttpsURLConnection) url.openConnection();
-                SSLContext sc;
-                sc = SSLContext.getInstance("TLS");
-                sc.init(null, null, new java.security.SecureRandom());
-                connection.setSSLSocketFactory(sc.getSocketFactory());
-                connection.setReadTimeout(7000);
-                connection.setConnectTimeout(7000);
-                connection.setRequestMethod("POST");
-                connection.setDoInput(true);
-                String postParameters=createQueryStringForParameters(params[0]);
-                connection.setFixedLengthStreamingMode(postParameters.getBytes().length);
-                connection.connect();
-                this.publishProgress(50);
-                PrintWriter out = new PrintWriter(connection.getOutputStream());
-                out.print(postParameters);
-                out.close();
-                int reply=connection.getResponseCode();
-                Log.i(TAG,"Reply from Server="+String.valueOf(reply));
-
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-                String inputLine;
-                this.publishProgress(70);
-                while ((inputLine = in.readLine()) != null) {
-                    result += inputLine;
-                }
-                JSONObject replyFromServer=null;
-                try {
-
-                    replyFromServer = new JSONObject(result);
-                }
-                catch(JSONException e)
-                {
-                    e.printStackTrace();
-                    Log.i(TAG,"JSON Error in parsing reply");
-                }
-                Log.i(TAG,result);
-                this.publishProgress(100);
-                return replyFromServer;
-
-
-            }
-            catch (MalformedURLException e)
-            {
-                e.printStackTrace();
-                Log.i(TAG, "URL Error");
-            }
-            catch (IOException e)
-            {
-
-                e.printStackTrace();
-                Log.i(TAG,"Error Connecting to Server");
-            }
-            catch (NoSuchAlgorithmException e)
-            {
-                e.printStackTrace();
-                Log.i(TAG,"Algorithm Error");
-            }
-            catch (KeyManagementException e)
-            {
-                e.printStackTrace();
-            }
-            return null;
-
-
-
-        }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
@@ -247,37 +230,9 @@ public class Checkout extends Activity {
             int progress = values[0];
             ServerProgressBar.setProgress(progress);
         }
-        private static final char PARAMETER_DELIMITER = '&';
-        private static final char PARAMETER_EQUALS_CHAR = '=';
 
 
-        public  String createQueryStringForParameters(JSONObject parameters) {
-            StringBuilder parametersAsQueryString = new StringBuilder();
-            Iterator<String > iterator = parameters.keys();
 
-            if (parameters != null) {
-                boolean firstParameter = true;
 
-                while(iterator.hasNext())
-                { String key=iterator.next();
-                    if (!firstParameter) {
-                        parametersAsQueryString.append(PARAMETER_DELIMITER);
-                    }
-                    try {
-                        parametersAsQueryString.append(key)
-                                .append(PARAMETER_EQUALS_CHAR)
-                                .append(URLEncoder.encode(parameters.getString(key), "UTF-8"));
-
-                    }catch(Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                    firstParameter = false;
-                }
-            }
-            Log.i("Build POST Response", parametersAsQueryString.toString());
-            return parametersAsQueryString.toString();
-        }
     }
 }

@@ -7,4 +7,35 @@
     tools:context="com.example.sankarmanoj.thefoodkingapp.ExistingOrder">
 
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/statusTextView"
+        android:text="Status : Out For Delivery"
+        android:textSize="20dp"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:paddingBottom="20dp"
+        />
+    <ListView
+        android:layout_below="@id/statusTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/existingOrderListView"
+        android:textColor="#333333"
+        android:layout_centerHorizontal="true"
+        android:divider="#555555"
+        android:dividerHeight="0.1dp"
+        android:layout_above="@+id/cancelOrderButton"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Cancel Order"
+        android:id="@+id/cancelOrderButton"
+        android:layout_alignParentBottom="true"
+        />
+
+
 </RelativeLayout>
