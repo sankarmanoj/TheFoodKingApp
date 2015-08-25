@@ -1,6 +1,7 @@
 package com.example.sankarmanoj.thefoodkingapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,7 +9,9 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -35,11 +38,15 @@ import javax.net.ssl.SSLContext;
 public class Checkout extends Activity {
     final public String TAG="CheckoutActivity";
     ProgressBar ServerProgressBar;
+    Activity activity;
+    TextView Status;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
         String uid;
+        activity=this;
+        Status=(TextView)findViewById(R.id.confirmOrderTextView);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         uid=sharedPreferences.getString("uid","null");
         ServerProgressBar=(ProgressBar)findViewById(R.id.progressBar);
@@ -108,7 +115,53 @@ public class Checkout extends Activity {
         @Override
         protected void onPostExecute(JSONObject jsonObject) {
             super.onPostExecute(jsonObject);
-            Toast.makeText(getApplicationContext(),"Successfully made order",Toast.LENGTH_SHORT).show();
+            try
+            {
+                  if(jsonObject.get("state").equals("order-successful"))
+                  {
+                      Toast.makeText(getApplicationContext(),"Placed Order Successfully",Toast.LENGTH_SHORT).show();
+                      ServerProgressBar.setVisibility(View.INVISIBLE);
+                      Status.setText("Placed Order Successfully");
+
+                  }
+                  else if(jsonObject.get("state").equals("invalid-request"))
+                  {
+                        Toast.makeText(getApplicationContext(),"Error placing order",Toast.LENGTH_LONG).show();
+                      ServerProgressBar.setVisibility(View.INVISIBLE);
+                  }
+                else if(jsonObject.get("state").equals("menu-error"))
+                  {
+                      Toast.makeText(getApplicationContext(),"Menu has been changed \n Item not available",Toast.LENGTH_LONG).show();
+                      ServerProgressBar.setVisibility(View.INVISIBLE);
+                  }
+                else if (jsonObject.get("state").equals("invalid-user"))
+                  {
+                      Toast.makeText(getApplicationContext(),"User is not valid \n Login Again",Toast.LENGTH_LONG).show();
+                      ServerProgressBar.setVisibility(View.INVISIBLE);
+                      PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().remove("uid").apply();
+                      Intent toLogin = new Intent(getApplicationContext(),Login.class);
+                      activity.finish();
+                      startActivity(toLogin);
+
+                  }
+                else if (jsonObject.get("state").equals("order-already-exists"))
+                  {
+                      Toast.makeText(getApplicationContext(),"Order has already been placed",Toast.LENGTH_LONG).show();
+                      ServerProgressBar.setVisibility(View.INVISIBLE);
+                      Status.setText("Retriving Order");
+                      ServerProgressBar.setProgress(0);
+
+                  }
+
+
+
+            }
+            catch (JSONException e)
+              {
+                Toast.makeText(getApplicationContext(),"Error Communicating with Server",Toast.LENGTH_SHORT).show();
+            }
+
+
 
         }
 

@@ -6,4 +6,5 @@
     <string name="title_activity_main">Menu</string>
     <string name="title_activity_fab_intro">FabIntro</string>
     <string name="title_activity_checkout">Checkout</string>
+    <string name="title_activity_existing_order">ExistingOrder</string>
 </resources>
