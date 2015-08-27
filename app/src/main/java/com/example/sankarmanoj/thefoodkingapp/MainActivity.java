@@ -165,7 +165,8 @@ public class MainActivity extends Activity {
 else if(id==R.id.checkout)
         {
             if(FoodKing.registrationState==1) {
-                Intent i = new Intent(getApplicationContext(), FoodCart.class);
+                Intent i = new Intent(getApplicationContext(), Checkout.class);
+                i.putExtra("action","get-status");
                 startActivity(i);
             }
             else

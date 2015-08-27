@@ -106,7 +106,9 @@ public class FoodCart extends Activity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(getApplicationContext(), com.example.sankarmanoj.thefoodkingapp.Checkout.class);
+                            intent.putExtra("action","place-order");
                             startActivity(intent);
+
                             dialog.dismiss();
                         }
                     }).setNegativeButton("No",new DialogInterface.OnClickListener() {

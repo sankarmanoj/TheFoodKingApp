@@ -17,22 +17,9 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
 
 
 public class Checkout extends Activity {
@@ -41,6 +28,7 @@ public class Checkout extends Activity {
     Activity activity;
     TextView Status;
     String uid;
+    String action;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,42 +38,61 @@ public class Checkout extends Activity {
         Status=(TextView)findViewById(R.id.confirmOrderTextView);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         uid=sharedPreferences.getString("uid","null");
-        ServerProgressBar=(ProgressBar)findViewById(R.id.progressBar);
-        List<FoodItem> order=new ArrayList<>();
-        final List<FoodItem> list=FoodKing.FoodMenu;
-        if((list)!=null) {
-            for (int i = 0; i < (list.size()); i++) {
-                if(list.get(i).inCartQuantity>0) {
-                    order.add(list.get(i));
+        action=getIntent().getStringExtra("action");
+        ServerProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        if(action.equals("place-order")) {
 
+            List<FoodItem> order = new ArrayList<>();
+            final List<FoodItem> list = FoodKing.FoodMenu;
+            if ((list) != null) {
+                for (int i = 0; i < (list.size()); i++) {
+                    if (list.get(i).inCartQuantity > 0) {
+                        order.add(list.get(i));
+
+                    }
                 }
             }
-        }
-        try
-        {
+            try {
 
-            JSONArray orderJSONArray = new JSONArray();
-            for (FoodItem x : order)
-            {
-                JSONObject a = new JSONObject();
-                a.put("name",x.name);
-                a.put("quantity",x.inCartQuantity);
-                a.put("id",x.id);
-                orderJSONArray.put(a);
+                JSONArray orderJSONArray = new JSONArray();
+                for (FoodItem x : order) {
+                    JSONObject a = new JSONObject();
+                    a.put("name", x.name);
+                    a.put("quantity", x.inCartQuantity);
+                    a.put("id", x.id);
+                    orderJSONArray.put(a);
+
+                }
+                JSONObject toSend = new JSONObject();
+                toSend.put("type", "create-order");
+                toSend.put("uid", uid);
+                toSend.put("order", orderJSONArray);
+                SubmitOrder toServer = new SubmitOrder();
+                toServer.execute(toSend);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e(TAG, "JSON Failed!");
 
             }
-            JSONObject toSend = new JSONObject();
-            toSend.put("type","create-order");
-            toSend.put("uid",uid);
-            toSend.put("order",orderJSONArray);
-            SubmitOrder toServer = new SubmitOrder();
-            toServer.execute(toSend);
         }
-        catch (JSONException e)
+        else if (action.equals("get-status"))
         {
-            e.printStackTrace();
-            Log.e(TAG,"JSON Failed!");
+            JSONObject jsonObject1 = new JSONObject();
+            try
+            {
 
+                jsonObject1.put("type","get-order");
+                jsonObject1.put("uid",uid);
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+            GetOrder getOrder = new GetOrder();
+            getOrder.execute(jsonObject1);
+            ServerProgressBar.setVisibility(View.VISIBLE);
+            Status.setText("Retriving Order Status...");
+            ServerProgressBar.setProgress(0);
         }
     }
 
@@ -132,12 +139,17 @@ public class Checkout extends Activity {
                         }
                         Intent toExistingOrder = new Intent(getApplicationContext(),ExistingOrder.class);
                         toExistingOrder.putExtra("json-object",jsonObject.toString());
+                        toExistingOrder.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         finish();
                         startActivity(toExistingOrder);
 
-
-
-
+                    }
+                    else if (jsonObject.get("state").equals("no-order-found"))
+                    {
+                        Intent toFoodCart = new Intent(getApplicationContext(),FoodCart.class);
+                        toFoodCart.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(toFoodCart);
+                        finish();
                     }
                     else
                     {
@@ -153,6 +165,13 @@ public class Checkout extends Activity {
                 }
 
         }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            int progress = values[0];
+            ServerProgressBar.setProgress(progress);
+        }
     }
     public class SubmitOrder extends JSONServerComm
     {
@@ -166,6 +185,19 @@ public class Checkout extends Activity {
                       Toast.makeText(getApplicationContext(),"Placed Order Successfully",Toast.LENGTH_SHORT).show();
                       ServerProgressBar.setVisibility(View.INVISIBLE);
                       Status.setText("Placed Order Successfully");
+                      JSONObject jsonObject1 = new JSONObject();
+                      try
+                      {
+
+                          jsonObject1.put("type","get-order");
+                          jsonObject1.put("uid",uid);
+                      }
+                      catch (JSONException e)
+                      {
+                          e.printStackTrace();
+                      }
+                      GetOrder getOrder = new GetOrder();
+                      getOrder.execute(jsonObject1);
 
                   }
                   else if(jsonObject.get("state").equals("invalid-request"))
@@ -204,7 +236,7 @@ public class Checkout extends Activity {
                       getOrder.execute(jsonObject1);
                       Toast.makeText(getApplicationContext(),"Order has already been placed",Toast.LENGTH_LONG).show();
                       ServerProgressBar.setVisibility(View.VISIBLE);
-                      Status.setText("Retriving Order...");
+                      Status.setText("Retrieving Order...");
                       ServerProgressBar.setProgress(0);
 
 

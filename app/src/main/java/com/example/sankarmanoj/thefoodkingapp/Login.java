@@ -258,12 +258,12 @@ public class Login extends Activity {
                     else if (jsonObject.getString("state").equals("password-error"))
                     {
                         Toast.makeText(getApplicationContext(),"Password is incorrect",Toast.LENGTH_LONG).show();
-                        register.setEnabled(true);
+                        RegisterButton.setEnabled(true);
                     }
                     else if(jsonObject.getString("state").equals("not-registered"))
                     {
                         Toast.makeText(getApplicationContext(),"User does not exist",Toast.LENGTH_LONG).show();
-                        register.setEnabled(true);
+                        RegisterButton.setEnabled(true);
                         registered=false;
                         ConfirmPass.setVisibility(View.VISIBLE);
                         ConfirmPass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
