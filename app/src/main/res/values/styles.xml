@@ -1,14 +1,21 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+    <style name="AppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar"
+        >
         <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:editTextBackground">@drawable/editext</item>
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarAppTheme</item>
 
 
     </style>
 
     <style name="MyActionBar"
         parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">#1395EF</item>
+        <item name="android:background">#6CA000</item>
+    </style>
+    <style name="ProgressBarAppTheme" parent="android:Widget.Holo.Light.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/apptheme_progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/apptheme_progress_indeterminate_horizontal_holo_light</item>
     </style>
 </resources>

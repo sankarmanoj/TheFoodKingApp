@@ -106,7 +106,7 @@ public class Login extends Activity {
         Password=(EditText)findViewById(R.id.passEditText);
 
 
-
+        getActionBar().setDisplayShowTitleEnabled(false);
 
         NameET=(EditText)findViewById(R.id.nameEditText);
         RegisterButton.setOnClickListener(new View.OnClickListener() {

@@ -62,6 +62,7 @@ public class FoodCart extends Activity {
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayShowTitleEnabled(false);
         setContentView(R.layout.activity_foodcart);
         GrandTotal=(TextView)findViewById(R.id.grandTotalTextView);
         ItemsTotal=(TextView)findViewById(R.id.itemsTotalTextView);

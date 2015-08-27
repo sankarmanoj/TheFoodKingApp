@@ -33,7 +33,7 @@ public class Checkout extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-
+        getActionBar().setDisplayShowTitleEnabled(false);
         activity=this;
         Status=(TextView)findViewById(R.id.confirmOrderTextView);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

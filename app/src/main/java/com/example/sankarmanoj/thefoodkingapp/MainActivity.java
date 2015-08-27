@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        getActionBar().setDisplayShowTitleEnabled(false);
 
         ErrorView = (TextView)findViewById(R.id.errorView);
         ErrorView.setOnClickListener(new View.OnClickListener() {

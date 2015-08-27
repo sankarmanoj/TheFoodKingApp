@@ -14,7 +14,8 @@
         android:text="Email"
         android:layout_below="@+id/nameEditText"
         android:layout_toLeftOf="@+id/registerButton"
-        android:layout_toStartOf="@+id/registerButton" />
+        android:layout_toStartOf="@+id/registerButton"
+/>
 
   <Button
         android:layout_width="wrap_content"
