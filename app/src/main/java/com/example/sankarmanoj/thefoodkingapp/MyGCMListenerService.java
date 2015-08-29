@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
@@ -13,20 +14,34 @@ public class MyGCMListenerService extends GcmListenerService {
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String type= data.getString("status");
-        switch ( type)
+        Log.i(TAG,data.toString());
+        String Stringtype= data.getString("type");
+        if (Stringtype.equals("button"))
         {
-            case "button":
-            {
-                String button = data.getString("button-type");
-                if (button.equals("confirmed"))
-                {
 
+                String button = data.getString("button-type");
+                if (button.equals("confirm"))
+                {
+                    Log.i(TAG,"Sent Confirm Broadcast");
+                    Intent confirm = new Intent("order-status");
+                    confirm.putExtra("status","Order Confirmed");
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(confirm);
                 }
-                break;
+                else  if (button.equals("dispatch"))
+                {
+                    Intent confirm = new Intent("order-status");
+                    confirm.putExtra("status","Order has been Dispatched.");
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(confirm);
+                } if (button.equals("close"))
+                      {
+                        Intent orderclose = new Intent(getApplicationContext(),MainActivity.class);
+                          orderclose.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                          startActivity(orderclose);
+                    }
+
 
             }
-        }
+
         Log.d(TAG, "From: " + from);
 
         /**

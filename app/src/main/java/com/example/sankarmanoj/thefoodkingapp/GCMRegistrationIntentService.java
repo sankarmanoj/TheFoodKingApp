@@ -24,7 +24,7 @@ import java.io.IOException;
  * TODO: Customize class - update intent actions and extra parameters.
  */
 public class GCMRegistrationIntentService extends IntentService {
-    public GCMRegistrationIntentService(String name) {
+    public GCMRegistrationIntentService() {
         super(TAG);
     }
     String uid;

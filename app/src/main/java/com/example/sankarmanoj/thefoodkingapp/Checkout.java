@@ -66,6 +66,11 @@ public class Checkout extends Activity {
                 JSONObject toSend = new JSONObject();
                 toSend.put("type", "create-order");
                 toSend.put("uid", uid);
+                String address = getIntent().getStringExtra("address");
+                toSend.put("address",address+"  ");
+                String comments = getIntent().getStringExtra("comments");
+                toSend.put("comments",comments+"  ");
+
                 toSend.put("order", orderJSONArray);
                 SubmitOrder toServer = new SubmitOrder();
                 toServer.execute(toSend);

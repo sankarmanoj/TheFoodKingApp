@@ -116,6 +116,10 @@ public class FoodCart extends Activity {
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(getApplicationContext(), com.example.sankarmanoj.thefoodkingapp.Checkout.class);
                             intent.putExtra("action","place-order");
+                            intent.putExtra("address",Address.getText().toString());
+                            String comments = Comments.getText().toString();
+                            intent.putExtra("comments",comments);
+
                             startActivity(intent);
 
                             dialog.dismiss();

@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +34,20 @@ public class ExistingOrder extends Activity {
     String uid;
     private BroadcastReceiver statusReceiver;
     FoodCartArrayAdapter foodArrayAdapter;
+    private final String TAG="ExistingOrderActivity";
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(statusReceiver);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(statusReceiver,new IntentFilter("order-status"));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,15 +61,24 @@ public class ExistingOrder extends Activity {
             startActivity(intent);
             finish();
         }
+
         OrderListView= (ListView)findViewById(R.id.existingOrderListView);
         CancelOrderButton = (Button)findViewById(R.id.cancelOrderButton);
         StatusTextView = (TextView)findViewById(R.id.statusTextView);
         StatusTextView.setText(FoodKing.status);
+        String token = sharedPreferences.getString("token","null");
+        if (token.equals("null"))
+        {
+            StatusTextView.setText("Unable to get Status");
+        }
+
         statusReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+
                 String status = intent.getStringExtra("status");
-                StatusTextView.setText("status");
+                Log.d(TAG,status);
+                StatusTextView.setText(status);
                 FoodKing.status=status;
             }
         };
@@ -68,6 +93,14 @@ public class ExistingOrder extends Activity {
                 FoodItem toAddItem = new FoodItem(item.getString("name"), Integer.parseInt(item.getString("price")), Integer.parseInt(item.getString("quantity")), Integer.parseInt(item.getString("id")));
                 toAddItem.setInCartQuantity(item.getString("quantity"));
                 items.add(toAddItem);
+            }
+            if(jsonObject.getBoolean("confirmed"))
+            {
+                StatusTextView.setText("Order Confirmed");
+            }
+            if(jsonObject.getBoolean("sent"))
+            {
+                StatusTextView.setText("Order Dispatched");
             }
             foodArrayAdapter = new FoodCartArrayAdapter(getApplicationContext(),R.layout.foodcartitem,items);
             OrderListView.setAdapter(foodArrayAdapter);

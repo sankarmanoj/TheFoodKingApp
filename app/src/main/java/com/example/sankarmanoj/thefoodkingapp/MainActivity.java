@@ -42,6 +42,12 @@ public class MainActivity extends Activity {
             startActivity(intent);
             finish();
         }
+        String gcmtoken = sharedPreferences.getString("token","null");
+        if(gcmtoken.equals("null"))
+        {
+           Intent intent = new Intent(getApplicationContext(),GCMRegistrationIntentService.class);
+            startService(intent);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
