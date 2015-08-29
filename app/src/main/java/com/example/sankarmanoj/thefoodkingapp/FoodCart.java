@@ -37,7 +37,7 @@ public class FoodCart extends Activity {
     List<FoodItem> tempList;
     ListView listView;
     EditText Address;
-    TextView addressText;
+
     EditText Comments;
     TextView GrandTotal;
     FoodCartArrayAdapter foodArrayAdapter;
@@ -76,7 +76,7 @@ public class FoodCart extends Activity {
         context=this;
         Comments=(EditText)findViewById(R.id.commentsEditText);
         Address=(EditText)findViewById(R.id.addressEditText);
-        addressText=(TextView)findViewById(R.id.addressTextView);
+
         listView=(ListView)findViewById(R.id.listView2);
         GrandTotal.setText("Grand Total : ₹ "+String.valueOf(grandTotal));
         foodArrayAdapter = new FoodCartArrayAdapter(getApplicationContext(),R.layout.fooditemlist,tempList);
@@ -91,6 +91,14 @@ public class FoodCart extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 Comments.setText("");
                 Comments.setTextColor(Color.rgb(0,0,0));
+                return false;
+            }
+        });
+        Address.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Address.setText("");
+                Address.setTextColor(Color.rgb(0,0,0));
                 return false;
             }
         });
@@ -128,7 +136,7 @@ public class FoodCart extends Activity {
             public void onClick(View v) {
                 GrandTotal.setVisibility(View.GONE);
                 ItemsTotal.setVisibility(View.GONE);
-                final int pixels = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
+                final int pixels = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 180, getResources().getDisplayMetrics());
                 Log.i("Pixels",String.valueOf(pixels));
 
                 Animation A = new Animation() {
@@ -144,7 +152,7 @@ public class FoodCart extends Activity {
                             listView.setBackground(null);
                             Checkout.setText("Next");
                             Address.setVisibility(View.VISIBLE);
-                            addressText.setVisibility(View.VISIBLE);
+
                             Comments.setVisibility(View.VISIBLE);
 
 

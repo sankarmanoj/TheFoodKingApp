@@ -24,11 +24,13 @@ public class FoodKing extends Application {
     static Boolean gotMenu=false;
     static int registrationState = 0;
    public static FoodKing singleton;
+    public static String status;
 
     @Override
     public void onCreate() {
         super.onCreate();
         singleton=this;
+        status="Order Not Confirmed";
         FoodMenu=new ArrayList<>();
 
         LoadMenu loadMenu  = new LoadMenu();

@@ -1,6 +1,8 @@
 package com.example.sankarmanoj.thefoodkingapp;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ public class ExistingOrder extends Activity {
     Button CancelOrderButton;
     TextView StatusTextView;
     String uid;
+    private BroadcastReceiver statusReceiver;
     FoodCartArrayAdapter foodArrayAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class ExistingOrder extends Activity {
         setContentView(R.layout.activity_existing_order);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         uid = sharedPreferences.getString("uid","null");
+
         if (uid.equals("null"))
         {
             Intent intent = new Intent(getApplicationContext(),Login.class);
@@ -44,7 +48,15 @@ public class ExistingOrder extends Activity {
         OrderListView= (ListView)findViewById(R.id.existingOrderListView);
         CancelOrderButton = (Button)findViewById(R.id.cancelOrderButton);
         StatusTextView = (TextView)findViewById(R.id.statusTextView);
-
+        StatusTextView.setText(FoodKing.status);
+        statusReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String status = intent.getStringExtra("status");
+                StatusTextView.setText("status");
+                FoodKing.status=status;
+            }
+        };
         List<FoodItem> items = new ArrayList<>();
         try {
             JSONObject jsonObject = new JSONObject(getIntent().getStringExtra("json-object"));

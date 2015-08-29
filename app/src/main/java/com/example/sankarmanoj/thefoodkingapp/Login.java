@@ -46,7 +46,7 @@ public class Login extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
+        FoodKing.registrationState=0;
         String uid = sharedPreferences.getString("uid","null");
         if (!uid.equals("null"))
         {

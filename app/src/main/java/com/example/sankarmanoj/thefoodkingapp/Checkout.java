@@ -198,6 +198,7 @@ public class Checkout extends Activity {
                       }
                       GetOrder getOrder = new GetOrder();
                       getOrder.execute(jsonObject1);
+                      FoodKing.status="Order Not Confirmed";
 
                   }
                   else if(jsonObject.get("state").equals("invalid-request"))
