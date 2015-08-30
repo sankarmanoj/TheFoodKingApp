@@ -16,6 +16,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -47,6 +51,21 @@ public class MainActivity extends Activity {
         {
            Intent intent = new Intent(getApplicationContext(),GCMRegistrationIntentService.class);
             startService(intent);
+        }
+        else
+        {
+            try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("type", "gcm-register");
+                jsonObject.put("uid", uid);
+                jsonObject.put("gcm-token", gcmtoken);
+                JSONServerComm json = new JSONServerComm();
+                json.execute(jsonObject);
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

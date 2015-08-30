@@ -78,6 +78,7 @@ public class ExistingOrder extends Activity {
 
                 String status = intent.getStringExtra("status");
                 Log.d(TAG,status);
+                CancelOrderButton.setVisibility(View.INVISIBLE);
                 StatusTextView.setText(status);
                 FoodKing.status=status;
             }
@@ -97,10 +98,12 @@ public class ExistingOrder extends Activity {
             if(jsonObject.getBoolean("confirmed"))
             {
                 StatusTextView.setText("Order Confirmed");
+                CancelOrderButton.setVisibility(View.INVISIBLE);
             }
             if(jsonObject.getBoolean("sent"))
             {
                 StatusTextView.setText("Order Dispatched");
+                CancelOrderButton.setVisibility(View.INVISIBLE);
             }
             foodArrayAdapter = new FoodCartArrayAdapter(getApplicationContext(),R.layout.foodcartitem,items);
             OrderListView.setAdapter(foodArrayAdapter);
@@ -152,6 +155,10 @@ public class ExistingOrder extends Activity {
                         finish();
 
 
+                    }
+                    else if (jsonObject.get("state").equals("already-confirmed"))
+                    {
+                        Toast.makeText(getApplicationContext(),"Order already confirmed, Can't cancel",Toast.LENGTH_LONG).show();
                     }
                     else
                     {

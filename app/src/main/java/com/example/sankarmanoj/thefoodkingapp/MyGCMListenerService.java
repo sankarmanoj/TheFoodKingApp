@@ -24,12 +24,14 @@ public class MyGCMListenerService extends GcmListenerService {
                 {
                     Log.i(TAG,"Sent Confirm Broadcast");
                     Intent confirm = new Intent("order-status");
+                    confirm.putExtra("button","confirm");
                     confirm.putExtra("status","Order Confirmed");
                     LocalBroadcastManager.getInstance(this).sendBroadcast(confirm);
                 }
                 else  if (button.equals("dispatch"))
                 {
                     Intent confirm = new Intent("order-status");
+                    confirm.putExtra("button","dispatch");
                     confirm.putExtra("status","Order has been Dispatched.");
                     LocalBroadcastManager.getInstance(this).sendBroadcast(confirm);
                 } if (button.equals("close"))
