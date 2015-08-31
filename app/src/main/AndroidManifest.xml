@@ -10,11 +10,12 @@
         android:name="com.example.sankarmanoj.thefoodkingapp.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.sankar_manoj.everyonesays.permission.C2D_MESSAGE" />
 
     <application
         android:name=".FoodKing"
         android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
