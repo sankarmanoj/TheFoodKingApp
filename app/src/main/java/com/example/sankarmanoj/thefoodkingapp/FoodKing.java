@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -33,20 +34,23 @@ public class FoodKing extends Application {
         status="Order Not Confirmed";
         FoodMenu=new ArrayList<>();
 
-        LoadMenu loadMenu  = new LoadMenu();
-        try {
-            JSONObject toSend = new JSONObject();
-            toSend.put("type","get-menu");
-            loadMenu.execute(toSend);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
 
+        updateMenu();
         updateRegistrationState();
     }
-   
+   public void updateMenu()
+   {
+       LoadMenu loadMenu  = new LoadMenu();
+       try {
+           JSONObject toSend = new JSONObject();
+           toSend.put("type","get-menu");
+           loadMenu.execute(toSend);
+       }
+       catch (Exception e)
+       {
+           e.printStackTrace();
+       }
+   }
     public void updateRegistrationState()
     {      SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
        String uid = sharedPreferences.getString("uid","null");
@@ -85,7 +89,8 @@ public class FoodKing extends Application {
                         }
                         FoodMenu=items;
                         gotMenu=true;
-
+                        Intent gotMenuIntent = new Intent(QuickPreferences.menuUpdated);
+                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(gotMenuIntent);
 
                         Log.d("MainActivity", "got items");
                         Log.d("MainActivity",items.toString());

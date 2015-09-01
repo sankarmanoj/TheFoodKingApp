@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.ImageButton;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,9 +30,18 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
         this.context = context;
         this.resource=resource;
     }
+    public List<FoodItem> getAllElements()
+    {
+        List <FoodItem> toreturn = new ArrayList<>();
+        for (int i = 0; i<getCount();i++)
+        {
+            toreturn.add(getItem(i));
+        }
+        return toreturn;
 
+    }
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
         if(rowView==null)
         {
@@ -58,6 +69,7 @@ public class FoodArrayAdapter extends ArrayAdapter<FoodItem> {
                         if ((item.inCartQuantity) < (item.quantity)) {
                             (item.inCartQuantity)++;
                             viewHolder.quantity.setText(Integer.toString(item.inCartQuantity));
+
                         } else
                             Log.d("Adapter", "Max quantity reached");
 

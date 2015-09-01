@@ -43,7 +43,10 @@ public class MyGCMListenerService extends GcmListenerService {
                 orderclose.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(orderclose);
             }
-
+        }
+        else if (Stringtype.equals("update-menu"))
+        {
+            FoodKing.singleton.updateMenu();
 
         }
     }
