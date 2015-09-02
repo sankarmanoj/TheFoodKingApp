@@ -70,6 +70,7 @@ public class Checkout extends Activity {
                 toSend.put("uid", uid);
                 String address = getIntent().getStringExtra("address");
                 toSend.put("address",address+"  ");
+                toSend.put("phone",getIntent().getStringExtra("phone"));
                 String comments = getIntent().getStringExtra("comments");
                 toSend.put("comments",comments+"  ");
 

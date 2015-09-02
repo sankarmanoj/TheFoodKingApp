@@ -36,6 +36,7 @@ public class FoodCart extends Activity {
     EditText Address;
     Activity activity;
     EditText Comments;
+    TextView phoneTV;
     TextView GrandTotal;
     FoodCartArrayAdapter foodArrayAdapter;
     Button Checkout;
@@ -76,6 +77,7 @@ public class FoodCart extends Activity {
         Comments=(EditText)findViewById(R.id.commentsEditText);
         Address=(EditText)findViewById(R.id.addressEditText);
         PhoneNumber=(EditText)findViewById(R.id.phoneEditText);
+        phoneTV=(TextView)findViewById(R.id.phoneTextView);
         listView=(ListView)findViewById(R.id.listView2);
         GrandTotal.setText("Grand Total : ₹ "+String.valueOf(grandTotal));
         foodArrayAdapter = new FoodCartArrayAdapter(getApplicationContext(),R.layout.fooditemlist,tempList);
@@ -101,12 +103,14 @@ public class FoodCart extends Activity {
                 return false;
             }
         });
-        final View.OnClickListener secondClickListener = new View.OnClickListener() {
+        final View.OnClickListener finalClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Address.getText().toString().length()<=1)
+
+                if(PhoneNumber.getText().toString().length()<10)
                 {
-                    Toast.makeText(getApplicationContext(),"Please fill in a valid Address",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Phone number too short",Toast.LENGTH_SHORT).show();
+
                 }
                 else
                 {
@@ -135,6 +139,26 @@ public class FoodCart extends Activity {
 
             }
         };
+        final View.OnClickListener secondClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Address.getText().toString().length()<=1)
+                {
+                    Toast.makeText(getApplicationContext(),"Please fill in a valid Address",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                Address.setVisibility(View.INVISIBLE);
+                Comments.setVisibility(View.INVISIBLE);
+                PhoneNumber.setVisibility(View.VISIBLE);
+                phoneTV.setVisibility(View.VISIBLE);
+
+                    Checkout.setText("Finish");
+                    Checkout.setOnClickListener(finalClickListener);
+                }
+
+            }
+        };
         Checkout.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,6 +182,7 @@ public class FoodCart extends Activity {
                             Address.setVisibility(View.VISIBLE);
 
                             Comments.setVisibility(View.VISIBLE);
+
 
 
 
