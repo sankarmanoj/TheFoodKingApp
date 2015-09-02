@@ -45,7 +45,13 @@ public class ExistingOrder extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        StatusTextView.setText(FoodKing.status);
+        if(FoodKing.status.equals("Order Confirmed")||FoodKing.status.equals("Order has been Dispatched."))
+        {
+            CancelOrderButton.setVisibility(View.INVISIBLE);
+        }
         LocalBroadcastManager.getInstance(this).registerReceiver(statusReceiver,new IntentFilter("order-status"));
+        Log.i(TAG,FoodKing.status);
     }
 
     @Override
@@ -66,6 +72,8 @@ public class ExistingOrder extends Activity {
         CancelOrderButton = (Button)findViewById(R.id.cancelOrderButton);
         StatusTextView = (TextView)findViewById(R.id.statusTextView);
         StatusTextView.setText(FoodKing.status);
+        sendBroadcast(new Intent("com.google.android.intent.action.GTALK_HEARTBEAT"));
+        sendBroadcast(new Intent("com.google.android.intent.action.MCS_HEARTBEAT"));
         String token = sharedPreferences.getString("token","null");
         if (token.equals("null"))
         {

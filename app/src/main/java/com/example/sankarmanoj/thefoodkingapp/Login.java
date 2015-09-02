@@ -253,31 +253,22 @@ public class Login extends Activity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                         startActivity(intent);
+                        finish();
 
                     }
                     else if (jsonObject.getString("state").equals("password-error"))
                     {
                         Toast.makeText(getApplicationContext(),"Password is incorrect",Toast.LENGTH_LONG).show();
+                        ConfirmPass.setVisibility(View.INVISIBLE);
                         RegisterButton.setEnabled(true);
+                        registered=true;
+
                     }
                     else if(jsonObject.getString("state").equals("not-registered"))
                     {
                         Toast.makeText(getApplicationContext(),"User does not exist",Toast.LENGTH_LONG).show();
                         RegisterButton.setEnabled(true);
-                        registered=false;
-                        ConfirmPass.setVisibility(View.VISIBLE);
-                        ConfirmPass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                            @Override
-                            public void onFocusChange(View v, boolean hasFocus) {
-                                if (hasFocus) {
-                                    ConfirmPass.setText("");
-                                    ConfirmPass.setOnFocusChangeListener(null);
-                                    ConfirmPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                                    ConfirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-                                }
-                            }
-                        });
                     }
                 }
                 catch (JSONException e)

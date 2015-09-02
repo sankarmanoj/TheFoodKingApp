@@ -30,14 +30,11 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by prudhvirampey on 18/08/15.
- */
 public class FoodCart extends Activity {
     List<FoodItem> tempList;
     ListView listView;
     EditText Address;
-
+    Activity activity;
     EditText Comments;
     TextView GrandTotal;
     FoodCartArrayAdapter foodArrayAdapter;
@@ -46,6 +43,7 @@ public class FoodCart extends Activity {
     int grandTotal=0;
     public final String TAG="FoodCart";
     Context context;
+    EditText PhoneNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -64,6 +62,7 @@ public class FoodCart extends Activity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowTitleEnabled(false);
         setContentView(R.layout.activity_foodcart);
+        activity = this;
         GrandTotal=(TextView)findViewById(R.id.grandTotalTextView);
         ItemsTotal=(TextView)findViewById(R.id.itemsTotalTextView);
         if(tempList.size()>1) {
@@ -76,7 +75,7 @@ public class FoodCart extends Activity {
         context=this;
         Comments=(EditText)findViewById(R.id.commentsEditText);
         Address=(EditText)findViewById(R.id.addressEditText);
-
+        PhoneNumber=(EditText)findViewById(R.id.phoneEditText);
         listView=(ListView)findViewById(R.id.listView2);
         GrandTotal.setText("Grand Total : ₹ "+String.valueOf(grandTotal));
         foodArrayAdapter = new FoodCartArrayAdapter(getApplicationContext(),R.layout.fooditemlist,tempList);
@@ -119,8 +118,9 @@ public class FoodCart extends Activity {
                             intent.putExtra("address",Address.getText().toString());
                             String comments = Comments.getText().toString();
                             intent.putExtra("comments",comments);
-
+                            intent.putExtra("phone",PhoneNumber.getText().toString());
                             startActivity(intent);
+                            activity.finish();
 
                             dialog.dismiss();
                         }

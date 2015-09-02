@@ -17,9 +17,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * Created by sankarmanoj on 8/18/15.
- */
+
 public class FoodKing extends Application {
     static List<FoodItem> FoodMenu;
     static Boolean gotMenu=false;
@@ -123,11 +121,16 @@ public class FoodKing extends Application {
                 if(jsonObject.get("state").equals("registered"))
                 {
                    registrationState=1;
+                    Intent registered= new Intent(QuickPreferences.regSuccess);
+                    registered.putExtra("type",QuickPreferences.regSuccess);
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(registered);
                 }
                 else if(jsonObject.get("state").equals("does-not-exist"))
                 {
                     registrationState=3;
-
+                    Intent registered= new Intent(QuickPreferences.regSuccess);
+                    registered.putExtra("type",QuickPreferences.noUser);
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(registered);
 
                 }
                 else

@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +24,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 
 public class MainActivity extends Activity {
@@ -35,10 +33,10 @@ public class MainActivity extends Activity {
     TextView ErrorView;
     String uid;
     Message msg;
-    Timer t2;
-    Handler handler;
+
     Handler ToastHandler;
     FoodArrayAdapter foodArrayAdapter;
+    BroadcastReceiver registerSuccess;
     BroadcastReceiver menuUpdated;
     public final String TAG="MainActivity";
 
@@ -88,6 +86,30 @@ public class MainActivity extends Activity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        registerSuccess = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String type = intent.getStringExtra("type");
+                if(type.equals(QuickPreferences.regSuccess))
+                {
+                    FoodKing.FoodMenu=foodArrayAdapter.getAllElements();
+                    Intent i = new Intent(getApplicationContext(), Checkout.class);
+                    i.putExtra("action","get-status");
+                    startActivity(i);
+                }
+                else if (type.equals(QuickPreferences.noUser))
+                {
+                    Toast.makeText(getApplicationContext(),"User does not exist\n Login In Again...",Toast.LENGTH_SHORT);
+                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().remove("uid").apply();
+                    Intent intent1 = new Intent(getApplicationContext(),Login.class);
+                    startActivity(intent1);
+                    finish();
+                }
+                LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(registerSuccess);
+            }
+        };
+        sendBroadcast(new Intent("com.google.android.intent.action.GTALK_HEARTBEAT"));
+        sendBroadcast(new Intent("com.google.android.intent.action.MCS_HEARTBEAT"));
         menuUpdated = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -126,11 +148,7 @@ public class MainActivity extends Activity {
                 Log.d(TAG, "List View updated");
          }
         };
-
-
-
         getActionBar().setDisplayShowTitleEnabled(false);
-
         ErrorView = (TextView)findViewById(R.id.errorView);
         ErrorView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,74 +156,11 @@ public class MainActivity extends Activity {
 
             }
         });
-        handler = new Handler()
-        {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                listView.setAdapter(foodArrayAdapter);
-            }
-        };
-        ToastHandler = new Handler()
-        {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                String toShow = (String)msg.obj;
-                Toast.makeText(getApplicationContext(),toShow,Toast.LENGTH_SHORT).show();
-            }
-        };
-
         listView=(ListView)findViewById(R.id.listView1);
         foodArrayAdapter = new FoodArrayAdapter(getApplicationContext(),R.layout.fooditemlist,FoodKing.FoodMenu);
         listView.setAdapter(foodArrayAdapter);
-
-
-
-
-
-
-
-
-
     }
 
-    public class checkRegTimer extends TimerTask {
-        @Override
-        public void run() {
-
-            switch (FoodKing.registrationState)
-            {
-                case 0:
-                    break;
-                case 1:
-
-
-
-                    t2.cancel();
-                    break;
-                case 2:
-
-                    msg = new Message();
-                    msg.obj=new String("Still not registered \n Click on link sent to your email");
-                    ToastHandler.sendMessage(msg);
-                    t2.cancel();
-                    break;
-                case 3:
-
-                    msg = new Message();
-                    msg.obj=new String("User doesn't exist. Please re-register.");
-                    ToastHandler.sendMessage(msg);
-                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().remove("uid").apply();
-                    Intent intent = new Intent(getApplicationContext(),Login.class);
-                    startActivity(intent);
-                    finish();
-                    t2.cancel();
-                    break;
-            }
-
-        }
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -245,11 +200,9 @@ else if(id==R.id.checkout)
             }
             else
             {
+                LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(registerSuccess,new IntentFilter(QuickPreferences.regSuccess));
                 FoodKing.singleton.updateRegistrationState();
                 Toast.makeText(getApplicationContext(),"Not Registered with Server\n Rechecking ...",Toast.LENGTH_SHORT).show();
-
-                    t2 = new Timer(true);
-                    t2.scheduleAtFixedRate(new checkRegTimer(), 100, 500);
 
             }
         }

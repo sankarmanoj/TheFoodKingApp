@@ -49,6 +49,10 @@ public class MyGCMListenerService extends GcmListenerService {
             FoodKing.singleton.updateMenu();
 
         }
+        else if (Stringtype.equals(QuickPreferences.regSuccess))
+        {
+            FoodKing.singleton.updateRegistrationState();
+        }
     }
 
 

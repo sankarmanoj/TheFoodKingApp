@@ -40,6 +40,8 @@ public class Checkout extends Activity {
         uid=sharedPreferences.getString("uid","null");
         action=getIntent().getStringExtra("action");
         ServerProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        sendBroadcast(new Intent("com.google.android.intent.action.GTALK_HEARTBEAT"));
+        sendBroadcast(new Intent("com.google.android.intent.action.MCS_HEARTBEAT"));
         if(action.equals("place-order")) {
 
             List<FoodItem> order = new ArrayList<>();
@@ -144,15 +146,22 @@ public class Checkout extends Activity {
                         }
                         Intent toExistingOrder = new Intent(getApplicationContext(),ExistingOrder.class);
                         toExistingOrder.putExtra("json-object",jsonObject.toString());
-                        toExistingOrder.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        if(jsonObject.getBoolean("confirmed"))
+                        {
+                            FoodKing.status="Order Confirmed";
+                        }
+                        if(jsonObject.getBoolean("sent"))
+                        {
+                            FoodKing.status="Order has been Dispatched.";
+                        }
                         finish();
                         startActivity(toExistingOrder);
+
 
                     }
                     else if (jsonObject.get("state").equals("no-order-found"))
                     {
                         Intent toFoodCart = new Intent(getApplicationContext(),FoodCart.class);
-                        toFoodCart.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(toFoodCart);
                         finish();
                     }
