@@ -37,6 +37,12 @@ public class FoodKing extends Application {
 
         updateMenu();
         updateRegistrationState();
+        if(checkForIntro())
+        {
+            Intent intent = new Intent(getApplicationContext(),FabIntro.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
    public void updateMenu()
    {
@@ -51,6 +57,14 @@ public class FoodKing extends Application {
            e.printStackTrace();
        }
    }
+    public boolean checkForIntro()
+    {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean intro=sharedPreferences.getBoolean("checkIntro",true);
+        return intro;
+
+
+    }
     public void updateRegistrationState()
     {      SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
        String uid = sharedPreferences.getString("uid","null");

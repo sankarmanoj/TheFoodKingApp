@@ -55,6 +55,11 @@
             android:name=".ExistingOrder"
             android:label="@string/title_activity_existing_order" >
         </activity>
+        <activity
+            android:name=".FabIntro"
+            android:label="FabIntro"
+             >
+        </activity>
 
         <service
             android:name=".MyGCMListenerService"
