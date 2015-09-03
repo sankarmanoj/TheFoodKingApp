@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,7 +68,10 @@ public class ExistingOrder extends Activity {
             startActivity(intent);
             finish();
         }
+         final ProgressBar spinner;
+        spinner = (ProgressBar)findViewById(R.id.progressBar1);
 
+        spinner.setVisibility(View.GONE);
         OrderListView= (ListView)findViewById(R.id.existingOrderListView);
         CancelOrderButton = (Button)findViewById(R.id.cancelOrderButton);
         StatusTextView = (TextView)findViewById(R.id.statusTextView);
@@ -127,6 +131,9 @@ public class ExistingOrder extends Activity {
         CancelOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                spinner.setVisibility(View.VISIBLE);
+
+                CancelOrderButton.setVisibility(View.GONE);
                 try
                 {
                     JSONObject jsonObject = new JSONObject();

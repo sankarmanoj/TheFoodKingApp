@@ -242,6 +242,7 @@ public class Login extends Activity {
             if(jsonObject==null)
             {
                 Toast.makeText(getApplicationContext(),"Error Communicating With Server \n Please try again later",Toast.LENGTH_SHORT).show();
+                RegisterButton.setEnabled(true);
             }
             else
                 try
