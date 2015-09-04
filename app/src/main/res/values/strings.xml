@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">The Food King App</string>
+    <string name="app_name">FoodKing</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
