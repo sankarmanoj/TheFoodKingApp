@@ -1,4 +1,4 @@
-package com.example.sankarmanoj.thefoodkingapp;
+package com.sankarmanoj.thefoodkingapp;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
+import com.sankarmanoj.thefoodkingapp.R;
 
 import java.util.ArrayList;
 import java.util.List;

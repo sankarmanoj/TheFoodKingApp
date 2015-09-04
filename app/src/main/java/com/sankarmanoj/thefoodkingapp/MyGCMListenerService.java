@@ -1,4 +1,4 @@
-package com.example.sankarmanoj.thefoodkingapp;
+package com.sankarmanoj.thefoodkingapp;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.sankarmanoj.thefoodkingapp.R;
 import com.google.android.gms.gcm.GcmListenerService;
 
 public class MyGCMListenerService extends GcmListenerService {

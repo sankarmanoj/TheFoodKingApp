@@ -1,4 +1,4 @@
-package com.example.sankarmanoj.thefoodkingapp;
+package com.sankarmanoj.thefoodkingapp;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -18,6 +18,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sankarmanoj.thefoodkingapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,12 +49,12 @@ public class ExistingOrder extends Activity {
     protected void onResume() {
         super.onResume();
         StatusTextView.setText(FoodKing.status);
-        if(FoodKing.status.equals("Order Confirmed")||FoodKing.status.equals("Order has been Dispatched."))
+        if(FoodKing.status.equals("Order Confirmed")|| FoodKing.status.equals("Order has been Dispatched."))
         {
             CancelOrderButton.setVisibility(View.INVISIBLE);
         }
         LocalBroadcastManager.getInstance(this).registerReceiver(statusReceiver,new IntentFilter("order-status"));
-        Log.i(TAG,FoodKing.status);
+        Log.i(TAG, FoodKing.status);
     }
 
     @Override

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.sankarmanoj.thefoodkingapp" >
+    package="com.sankarmanoj.thefoodkingapp" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <permission
-        android:name="com.example.sankarmanoj.thefoodkingapp.permission.C2D_MESSAGE"
+        android:name="com.sankarmanoj.thefoodkingapp.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.sankar_manoj.everyonesays.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.sankarmanoj.thefoodkingapp.permission.C2D_MESSAGE" />
 
     <application
         android:name=".FoodKing"
@@ -39,7 +39,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
-                <category android:name="com.example.sankarmanoj.thefoodkingapp" />
+                <category android:name="com.sankarmanoj.thefoodkingapp" />
             </intent-filter>
         </receiver>
         <activity

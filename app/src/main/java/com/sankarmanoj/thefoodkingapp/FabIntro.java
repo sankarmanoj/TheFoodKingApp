@@ -1,18 +1,9 @@
-package com.example.sankarmanoj.thefoodkingapp;
-
-import android.graphics.Color;
-
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+package com.sankarmanoj.thefoodkingapp;
 
 import android.content.Intent;
-import android.view.View;
-import android.widget.Toast;
-import com.github.paolorotolo.appintro.AppIntro;
+import android.os.Bundle;
 
 import com.github.paolorotolo.appintro.AppIntro;
-
 
 
 public class FabIntro extends AppIntro {

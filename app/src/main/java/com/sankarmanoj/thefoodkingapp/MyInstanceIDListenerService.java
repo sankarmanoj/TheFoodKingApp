@@ -1,10 +1,4 @@
-package com.example.sankarmanoj.thefoodkingapp;
-
-import android.app.Service;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.IBinder;
-import android.preference.PreferenceManager;
+package com.sankarmanoj.thefoodkingapp;
 
 import com.google.android.gms.iid.InstanceIDListenerService;
 

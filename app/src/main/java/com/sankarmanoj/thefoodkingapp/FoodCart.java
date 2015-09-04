@@ -1,4 +1,4 @@
-package com.example.sankarmanoj.thefoodkingapp;
+package com.sankarmanoj.thefoodkingapp;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -25,7 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import com.sankarmanoj.thefoodkingapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ public class FoodCart extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         tempList=new ArrayList<>();
-        final List<FoodItem> list=FoodKing.FoodMenu;
+        final List<FoodItem> list= FoodKing.FoodMenu;
         if((list)!=null) {
             for (int i = 0; i < (list.size()); i++) {
                 if(list.get(i).inCartQuantity>0) {
@@ -117,7 +117,7 @@ public class FoodCart extends Activity {
                     new AlertDialog.Builder(context).setTitle("Proceed").setMessage("Would you like to Confirm your Order?").setPositiveButton("Yes",new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(getApplicationContext(), com.example.sankarmanoj.thefoodkingapp.Checkout.class);
+                            Intent intent = new Intent(getApplicationContext(), com.sankarmanoj.thefoodkingapp.Checkout.class);
                             intent.putExtra("action","place-order");
                             intent.putExtra("address",Address.getText().toString());
                             String comments = Comments.getText().toString();

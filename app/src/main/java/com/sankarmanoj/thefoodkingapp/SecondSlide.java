@@ -1,8 +1,9 @@
-package com.example.sankarmanoj.thefoodkingapp;
+package com.sankarmanoj.thefoodkingapp;
 
 /**
  * Created by prudhvirampey on 11/07/15.
  */
+
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,11 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sankarmanoj.thefoodkingapp.R;
 
-public class FirstSlide extends Fragment {
+
+public class SecondSlide extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.intro, container, false);
+        View v = inflater.inflate(R.layout.intro2, container, false);
         return v;
     }
 }
