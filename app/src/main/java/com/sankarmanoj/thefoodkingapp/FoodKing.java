@@ -1,4 +1,4 @@
-package com.example.sankarmanoj.thefoodkingapp;
+package com.sankarmanoj.thefoodkingapp;
 
 import android.app.Application;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -14,8 +13,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class FoodKing extends Application {
@@ -136,14 +133,14 @@ public class FoodKing extends Application {
                 {
                    registrationState=1;
                     Intent registered= new Intent(QuickPreferences.regSuccess);
-                    registered.putExtra("type",QuickPreferences.regSuccess);
+                    registered.putExtra("type", QuickPreferences.regSuccess);
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(registered);
                 }
                 else if(jsonObject.get("state").equals("does-not-exist"))
                 {
                     registrationState=3;
                     Intent registered= new Intent(QuickPreferences.regSuccess);
-                    registered.putExtra("type",QuickPreferences.noUser);
+                    registered.putExtra("type", QuickPreferences.noUser);
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(registered);
 
                 }

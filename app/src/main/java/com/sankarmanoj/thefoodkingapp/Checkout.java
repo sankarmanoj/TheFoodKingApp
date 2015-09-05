@@ -1,9 +1,8 @@
-package com.example.sankarmanoj.thefoodkingapp;
+package com.sankarmanoj.thefoodkingapp;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -14,12 +13,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sankarmanoj.thefoodkingapp.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 public class Checkout extends Activity {

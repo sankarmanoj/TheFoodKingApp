@@ -1,4 +1,4 @@
-package com.example.sankarmanoj.thefoodkingapp;
+package com.sankarmanoj.thefoodkingapp;
 
 /**
  * Created by sankarmanoj on 9/1/15.

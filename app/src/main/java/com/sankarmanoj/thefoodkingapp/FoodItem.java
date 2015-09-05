@@ -1,4 +1,4 @@
-package com.example.sankarmanoj.thefoodkingapp;
+package com.sankarmanoj.thefoodkingapp;
 
 import java.net.URI;
 

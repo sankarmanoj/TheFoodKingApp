@@ -1,13 +1,12 @@
-package com.example.sankarmanoj.thefoodkingapp;
+package com.sankarmanoj.thefoodkingapp;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.sankarmanoj.thefoodkingapp.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
@@ -18,7 +17,7 @@ import java.io.IOException;
 
 
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
+ * An {@link android.app.IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
  * <p/>
  * TODO: Customize class - update intent actions and extra parameters.
