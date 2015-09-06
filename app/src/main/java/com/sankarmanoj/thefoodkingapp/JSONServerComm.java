@@ -64,7 +64,7 @@ public class JSONServerComm extends AsyncTask<JSONObject,Integer,JSONObject>{
         String result= new String();
         HttpsURLConnection connection;
         try {
-            URL url = new URL("https://sankar-manoj.com/request/");
+            URL url = new URL("https://foodking.in/request/");
 
 
             connection = (HttpsURLConnection) url.openConnection();

@@ -20,8 +20,9 @@ import java.io.IOException;
  * An {@link android.app.IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
  * <p/>
- * TODO: Customize class - update intent actions and extra parameters.
+ *
  */
+
 public class GCMRegistrationIntentService extends IntentService {
     public GCMRegistrationIntentService() {
         super(TAG);
