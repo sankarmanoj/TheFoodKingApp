@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sankarmanoj.thefoodkingapp.R;
@@ -30,6 +31,7 @@ public class Login extends Activity {
     Dialog dialog;
     Button RegisterButton;
     EditText NameET;
+    TextView NameTextView;
     EditText Password;
     EditText ConfirmPass;
     public final String TAG="LoginActivity";
@@ -68,6 +70,7 @@ public class Login extends Activity {
                     RegisterButton.setText("Login");
                     ConfirmPass.setVisibility(View.INVISIBLE);
                     NameET.setVisibility(View.INVISIBLE);
+                    NameTextView.setVisibility(View.INVISIBLE);
                     dialog.dismiss();
                 }
             });
@@ -105,6 +108,7 @@ public class Login extends Activity {
         EmailET=(EditText)findViewById(R.id.emailEdit);
         ConfirmPass = (EditText) findViewById(R.id.confirmEdit);
         Password=(EditText)findViewById(R.id.passEditText);
+        NameTextView = (TextView)findViewById(R.id.nameTextView);
 
 
         getActionBar().setDisplayShowTitleEnabled(false);
@@ -225,6 +229,10 @@ public class Login extends Activity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        else if (id==R.id.action_switch)
+        {
+            recreate();
         }
 
         return super.onOptionsItemSelected(item);
