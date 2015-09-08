@@ -30,6 +30,7 @@ public class Login extends Activity {
     EditText EmailET;
     Dialog dialog;
     Button RegisterButton;
+    Button ForgetPassButton;
     EditText NameET;
     TextView NameTextView;
     EditText Password;
@@ -108,6 +109,7 @@ public class Login extends Activity {
         EmailET=(EditText)findViewById(R.id.emailEdit);
         ConfirmPass = (EditText) findViewById(R.id.confirmEdit);
         Password=(EditText)findViewById(R.id.passEditText);
+        ForgetPassButton=(Button) findViewById(R.id.forgotPassButton);
         NameTextView = (TextView)findViewById(R.id.nameTextView);
 
 
@@ -175,6 +177,50 @@ public class Login extends Activity {
                     ConfirmPass.setText("");
                 }
             }
+
+        });
+
+        ForgetPassButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    String mailName = EmailET.getText().toString();
+                    if(mailName.length()>0) {
+                        if (mailName.charAt(mailName.length() - 1) == ' ') {
+                            mailName = mailName.substring(0, mailName.length() - 1);
+
+                        }
+                    }
+                    if (mailName.equals("")) {
+                        Toast.makeText(getApplicationContext(), "Enter an email address", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (isEmailValid(mailName)) {
+
+                        if(registered)
+                        {
+                            LoginServerComm login = new LoginServerComm();
+                            JSONObject toSend = new JSONObject();
+                            try {
+                                toSend.put("name", NameET.getText());
+                                toSend.put("email", EmailET.getText());
+                                toSend.put("type", "forgot_pass");
+
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            login.execute(toSend);
+                            ForgetPassButton.setEnabled(false);
+                        }
+
+
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+
 
         });
         EmailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -278,6 +324,18 @@ public class Login extends Activity {
                     {
                         Toast.makeText(getApplicationContext(),"User does not exist",Toast.LENGTH_LONG).show();
                         RegisterButton.setEnabled(true);
+
+                    }
+                    else if(jsonObject.getString("state").equals("password-changed"))
+                    {
+                        Toast.makeText(getApplicationContext(),"Your password has been changed successfully",Toast.LENGTH_LONG).show();
+                        ForgetPassButton.setEnabled(true);
+
+                    }
+                    else if(jsonObject.getString("state").equals("password-change-error"))
+                    {
+                        Toast.makeText(getApplicationContext(),"Sorry! There was a problem in changing your password. Please try again.",Toast.LENGTH_LONG).show();
+                        ForgetPassButton.setEnabled(true);
 
                     }
                 }
