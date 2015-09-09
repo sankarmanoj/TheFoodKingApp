@@ -17,7 +17,7 @@
         android:textColor="#ffffff"
         android:paddingRight="32dp"
         android:textSize="28sp"
-        android:text="Slide 2 title"/>
+        android:text="Passion to serve"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -27,12 +27,12 @@
         android:layout_weight="5">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/ic_slide2"/>
+            android:src="@mipmap/ic_launcher"/>
     </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
         android:paddingLeft="64dp"
         android:paddingRight="64dp"
         android:textSize="16sp"
-        android:text="Loooooooooooooooo[...]ooooooooong descreption here"/>
+        android:text="Started by a BITS alumnus, FoodKing now allows you to deliver food right to your doorstep! "/>
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="64dp" />
