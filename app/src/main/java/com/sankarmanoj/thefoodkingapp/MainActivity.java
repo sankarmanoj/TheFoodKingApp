@@ -34,9 +34,6 @@ public class MainActivity extends Activity {
     Menu MainMenu;
     TextView ErrorView;
     String uid;
-    Message msg;
-
-    Handler ToastHandler;
     FoodArrayAdapter foodArrayAdapter;
     BroadcastReceiver registerSuccess;
     BroadcastReceiver menuUpdated;
@@ -161,6 +158,10 @@ public class MainActivity extends Activity {
         listView=(ListView)findViewById(R.id.listView1);
         foodArrayAdapter = new FoodArrayAdapter(getApplicationContext(),R.layout.fooditemlist,FoodKing.FoodMenu);
         listView.setAdapter(foodArrayAdapter);
+        if(!FoodKing.runningGetMenu)
+        {
+            FoodKing.singleton.updateMenu();
+        }
     }
 
     @Override

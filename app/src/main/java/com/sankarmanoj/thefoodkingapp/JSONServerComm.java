@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
@@ -27,7 +29,7 @@ import javax.net.ssl.SSLContext;
 /**
  * Created by sankarmanoj on 8/14/15.
  */
-public class JSONServerComm extends AsyncTask<JSONObject,Integer,JSONObject>{
+ public class JSONServerComm extends AsyncTask<JSONObject,Integer,JSONObject>{
     public final String TAG="JSONServerComm";
     Context context;
     Activity activity;
@@ -62,6 +64,7 @@ public class JSONServerComm extends AsyncTask<JSONObject,Integer,JSONObject>{
     @Override
     protected JSONObject doInBackground(JSONObject... params) {
         String result= new String();
+        String returnState = new String();
         HttpsURLConnection connection;
         try {
             URL url = new URL("https://foodking.in/request/");
@@ -83,6 +86,7 @@ public class JSONServerComm extends AsyncTask<JSONObject,Integer,JSONObject>{
             PrintWriter out = new PrintWriter(connection.getOutputStream());
             out.print(postParameters);
             out.close();
+            this.publishProgress(60);
             int reply=connection.getResponseCode();
             Log.i(TAG,"Reply from Server="+String.valueOf(reply));
 
@@ -93,6 +97,7 @@ public class JSONServerComm extends AsyncTask<JSONObject,Integer,JSONObject>{
             while ((inputLine = in.readLine()) != null) {
                 result += inputLine;
             }
+            this.publishProgress(80);
             JSONObject replyFromServer=null;
             try {
 
@@ -112,23 +117,40 @@ public class JSONServerComm extends AsyncTask<JSONObject,Integer,JSONObject>{
         {
             e.printStackTrace();
             Log.i(TAG, "URL Error");
+            return null;
         }
-        catch (IOException e)
-        {
 
-            e.printStackTrace();
-            Log.i(TAG,"Error Connecting to Server");
+        catch (SocketTimeoutException e)
+        {
+            returnState="timeout";
+            JSONObject resultJSON=new JSONObject();
+            try {
+
+                resultJSON.put("state",returnState);
+            }
+
+            catch(JSONException e2)
+            {
+                e2.printStackTrace();
+
+            }
+            return resultJSON;
+        }
+        catch(IOException e)
+        {
+            return null;
         }
         catch (NoSuchAlgorithmException e)
         {
             e.printStackTrace();
             Log.i(TAG,"Algorithm Error");
+            return null;
         }
-        catch (KeyManagementException e)
-        {
+        catch (KeyManagementException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
+
 
 
     }

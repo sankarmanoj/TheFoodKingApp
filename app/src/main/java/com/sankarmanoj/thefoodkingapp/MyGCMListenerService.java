@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-
-import com.sankarmanoj.thefoodkingapp.R;
 import com.google.android.gms.gcm.GcmListenerService;
 
 public class MyGCMListenerService extends GcmListenerService {
@@ -40,9 +38,12 @@ public class MyGCMListenerService extends GcmListenerService {
 
             }
             if (button.equals("close")) {
-                Intent orderclose = new Intent(getApplicationContext(), MainActivity.class);
-                orderclose.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(orderclose);
+                Intent confirm = new Intent("order-status");
+                confirm.putExtra("button","closed");
+                LocalBroadcastManager.getInstance(this).sendBroadcast(confirm);
+                NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.cancelAll();
+
             }
         }
         else if (Stringtype.equals("update-menu"))

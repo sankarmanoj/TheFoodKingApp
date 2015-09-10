@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.sankarmanoj.thefoodkingapp.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -80,6 +81,9 @@ public class GCMRegistrationIntentService extends IntentService {
                 {
                     Intent intent1 = new Intent(getApplicationContext(),Login.class);
                     startActivity(intent1);
+                }  else if(jsonObject.get("state").equals("timeout"))
+                {
+                    Toast.makeText(getApplicationContext(), "Connection Timed Out. \n Connectivity might be too slow.", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {

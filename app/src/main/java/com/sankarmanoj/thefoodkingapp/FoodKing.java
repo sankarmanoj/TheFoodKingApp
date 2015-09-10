@@ -21,6 +21,7 @@ public class FoodKing extends Application {
     static int registrationState = 0;
    public static FoodKing singleton;
     public static String status;
+    public static boolean runningGetMenu=false;
 
     @Override
     public void onCreate() {
@@ -41,6 +42,7 @@ public class FoodKing extends Application {
     }
    public void updateMenu()
    {
+       runningGetMenu=true;
        LoadMenu loadMenu  = new LoadMenu();
        try {
            JSONObject toSend = new JSONObject();
@@ -79,6 +81,7 @@ public class FoodKing extends Application {
         @Override
         protected void onPostExecute(JSONObject jsonObject) {
             super.onPostExecute(jsonObject);
+            runningGetMenu=false;
             List<FoodItem> items = new ArrayList<>();
             if(jsonObject==null)
             {
@@ -104,6 +107,9 @@ public class FoodKing extends Application {
                         Log.d("MainActivity", "got items");
                         Log.d("MainActivity",items.toString());
 
+                    }  else if(jsonObject.get("state").equals("timeout"))
+                    {
+                        Toast.makeText(getApplicationContext(),"Connection Timed Out. \n Connectivity might be too slow.",Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
@@ -143,6 +149,9 @@ public class FoodKing extends Application {
                     registered.putExtra("type", QuickPreferences.noUser);
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(registered);
 
+                }  else if(jsonObject.get("state").equals("timeout"))
+                {
+                    Toast.makeText(getApplicationContext(),"Connection Timed Out. \n Connectivity might be too slow.",Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
