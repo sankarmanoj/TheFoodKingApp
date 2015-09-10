@@ -7,4 +7,5 @@
     <string name="title_activity_fab_intro">FabIntro</string>
     <string name="title_activity_checkout">Checkout</string>
     <string name="title_activity_existing_order">ExistingOrder</string>
+    <string name="search_hint">Search for your food</string>
 </resources>
