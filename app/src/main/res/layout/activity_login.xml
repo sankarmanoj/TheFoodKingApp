@@ -108,7 +108,8 @@
         android:id="@+id/forgotPassButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white"
+        android:visibility="invisible" />
 
 
 

@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sankarmanoj.thefoodkingapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +33,7 @@ public class Login extends Activity {
     EditText NameET;
     TextView NameTextView;
     EditText Password;
+    Context ActivityContext;
     EditText ConfirmPass;
     public final String TAG="LoginActivity";
 
@@ -50,6 +50,7 @@ public class Login extends Activity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("checkIntro",false);
         editor.commit();
+        ActivityContext=this;
         FoodKing.registrationState=0;
         String uid = sharedPreferences.getString("uid","null");
         if (!uid.equals("null"))
@@ -72,6 +73,7 @@ public class Login extends Activity {
                     ConfirmPass.setVisibility(View.INVISIBLE);
                     NameET.setVisibility(View.INVISIBLE);
                     NameTextView.setVisibility(View.INVISIBLE);
+                    ForgetPassButton.setVisibility(View.VISIBLE);
                     dialog.dismiss();
                 }
             });
@@ -197,10 +199,9 @@ public class Login extends Activity {
 
                         if(registered)
                         {
-                            LoginServerComm login = new LoginServerComm();
+                            ResetPassword resetPassword = new ResetPassword();
                             JSONObject toSend = new JSONObject();
                             try {
-                                toSend.put("name", NameET.getText());
                                 toSend.put("email", EmailET.getText());
                                 toSend.put("type", "forgot_pass");
 
@@ -208,7 +209,7 @@ public class Login extends Activity {
                             catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            login.execute(toSend);
+                            resetPassword.execute(toSend);
                             ForgetPassButton.setEnabled(false);
                         }
 
@@ -345,6 +346,34 @@ public class Login extends Activity {
                 }
         }
     }
+    public class ResetPassword extends JSONServerComm
+    {
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            super.onPostExecute(jsonObject);
+
+            super.onPostExecute(jsonObject);
+            if (jsonObject == null) {
+                Toast.makeText(getApplicationContext(), "Error Communicating With Server \n Please try again later", Toast.LENGTH_SHORT).show();
+            } else
+                try {
+                    if (jsonObject.get("state").equals("success")) {
+                        Toast.makeText(getApplicationContext(), "Password reset link has been sent to the registered Email Address", Toast.LENGTH_SHORT).show();
+
+                    } else if (jsonObject.get("state").equals("not-registered")) {
+                        Toast.makeText(getApplicationContext(), "Invalid Email Address", Toast.LENGTH_SHORT).show();
+                        ForgetPassButton.setEnabled(true);
+
+                    }
+                    else if(jsonObject.get("state").equals("timeout"))
+                    {
+                        Toast.makeText(getApplicationContext(),"Connection Timed Out. \n Connectivity might be too slow.",Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+        }
+    }
     public class RegisterServerComm extends JSONServerComm
     {
         public RegisterServerComm(Context context,Button register, EditText email,Activity activity)
@@ -368,17 +397,36 @@ public class Login extends Activity {
                         String uid=jsonObject.getString("uid");
                         SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
                         sharedPreferences.edit().putString("uid",uid).apply();
-                        Intent intent = new Intent(context.getApplicationContext(), MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        startActivity(intent);
-                        finish();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ActivityContext);
+                        builder.setTitle("A Registration Link has been sent to your Email Address");
+                        builder.setMessage("Please Click on it register");
+                        builder.setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(context.getApplicationContext(), MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                        AlertDialog dialog1= builder.create();
+                        dialog1.show();
 
+
+                    }
+                    else if (jsonObject.get("state").equals("already-exists"))
+                    {
+                        Toast.makeText(getApplicationContext(),"That Email has already been used",Toast.LENGTH_LONG).show();
+                        register.setEnabled(true);
                     }
                     else if(jsonObject.get("state").equals("email-error"))
                     {
                         Toast.makeText(context,"Error in sending registration mail",Toast.LENGTH_LONG).show();
                         register.setEnabled(true);
+                    }  else if(jsonObject.get("state").equals("timeout"))
+                    {
+                        Toast.makeText(getApplicationContext(),"Connection Timed Out. \n Connectivity might be too slow.",Toast.LENGTH_SHORT).show();
                     }
                 }
                 catch (Exception e)

@@ -12,9 +12,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.sankarmanoj.thefoodkingapp.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -166,6 +163,9 @@ public class Checkout extends Activity {
                         Intent toFoodCart = new Intent(getApplicationContext(),FoodCart.class);
                         startActivity(toFoodCart);
                         finish();
+                    }  else if(jsonObject.get("state").equals("timeout"))
+                    {
+                        Toast.makeText(getApplicationContext(),"Connection Timed Out. \n Connectivity might be too slow.",Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
@@ -258,11 +258,15 @@ public class Checkout extends Activity {
 
 
                   }
+                  else if(jsonObject.get("state").equals("timeout"))
+                  {
+                      Toast.makeText(getApplicationContext(),"Connection Timed Out. \n Connectivity might be too slow.",Toast.LENGTH_SHORT).show();
+                  }
 
 
 
             }
-            catch (JSONException e)
+            catch (Exception e)
               {
                 Toast.makeText(getApplicationContext(),"Error Communicating with Server",Toast.LENGTH_SHORT).show();
             }

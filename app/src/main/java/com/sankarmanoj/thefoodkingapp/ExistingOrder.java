@@ -18,9 +18,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.sankarmanoj.thefoodkingapp.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -90,11 +87,23 @@ public class ExistingOrder extends Activity {
             @Override
             public void onReceive(Context context, Intent intent) {
 
-                String status = intent.getStringExtra("status");
-                Log.d(TAG,status);
-                CancelOrderButton.setVisibility(View.INVISIBLE);
-                StatusTextView.setText(status);
-                FoodKing.status=status;
+                if(intent.getStringExtra("button").equals("closed"))
+                {
+                    Intent orderclose = new Intent(getApplicationContext(), MainActivity.class);
+                    orderclose.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    startActivity(orderclose);
+                    finish();
+                    FoodKing.status="";
+
+                }
+                else {
+                    String status = intent.getStringExtra("status");
+                    Log.d(TAG, status);
+                    CancelOrderButton.setVisibility(View.INVISIBLE);
+                    StatusTextView.setText(status);
+                    FoodKing.status = status;
+                }
             }
         };
         List<FoodItem> items = new ArrayList<>();
@@ -179,8 +188,10 @@ public class ExistingOrder extends Activity {
                     }
                     else
                     {
-                        Toast.makeText(getApplicationContext(), "Unknown error in cancelling order. Please contact the administrator", Toast.LENGTH_LONG).show();
-
+                        Toast.makeText(getApplicationContext(), "Order already cancelled", Toast.LENGTH_LONG).show();
+                        Intent goHome = new Intent(getApplicationContext(),MainActivity.class);
+                        startActivity(goHome);
+                        finish();
                     }
 
 

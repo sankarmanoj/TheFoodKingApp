@@ -92,6 +92,7 @@ public class FoodCart extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 Comments.setText("");
                 Comments.setTextColor(Color.rgb(0,0,0));
+                Comments.setOnTouchListener(null);
                 return false;
             }
         });
@@ -100,6 +101,7 @@ public class FoodCart extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 Address.setText("");
                 Address.setTextColor(Color.rgb(0,0,0));
+                Address.setOnTouchListener(null);
                 return false;
             }
         });
@@ -111,6 +113,10 @@ public class FoodCart extends Activity {
                 {
                     Toast.makeText(getApplicationContext(),"Phone number too short",Toast.LENGTH_SHORT).show();
 
+                }
+                else if (PhoneNumber.getText().toString().length()>10)
+                {
+                    Toast.makeText(getApplicationContext(),"Phone number too long",Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
@@ -142,7 +148,7 @@ public class FoodCart extends Activity {
         final View.OnClickListener secondClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Address.getText().toString().length()<=1)
+                if(Address.getText().toString().length()<=3)
                 {
                     Toast.makeText(getApplicationContext(),"Please fill in a valid Address",Toast.LENGTH_SHORT).show();
                 }
