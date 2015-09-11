@@ -28,6 +28,9 @@ import com.sankarmanoj.thefoodkingapp.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends Activity {
     ListView listView;
@@ -38,6 +41,7 @@ public class MainActivity extends Activity {
     BroadcastReceiver registerSuccess;
     BroadcastReceiver menuUpdated;
     public final String TAG="MainActivity";
+    List<FoodItem> FoodArray;
 
     @Override
     protected void onPause() {
@@ -48,7 +52,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(menuUpdated,new IntentFilter(QuickPreferences.menuUpdated));
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(menuUpdated, new IntentFilter(QuickPreferences.menuUpdated));
     }
 
     @Override
@@ -148,6 +152,7 @@ public class MainActivity extends Activity {
          }
         };
         getActionBar().setDisplayShowTitleEnabled(false);
+        handleIntent(getIntent());
         ErrorView = (TextView)findViewById(R.id.errorView);
         ErrorView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,9 +179,60 @@ public class MainActivity extends Activity {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (s != "") {
+                    Intent i;
+                    i = new Intent(getApplicationContext(), MainActivity.class);
+                    i.setAction(Intent.ACTION_SEARCH);
+                    i.putExtra(SearchManager.QUERY, s);
+                    startActivity(i);
+                    return true;
+                }
+                return false;
+
+            }
+        });
 
         return true;
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        handleIntent(intent);
+    }
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+
+            showResults(query);
+        }
+    }
+    private void showResults(String query) {
+        FoodArray = new ArrayList<>();
+        for(int i=0;i<FoodKing.FoodMenu.size();i++)
+        {
+            if(FoodKing.FoodMenu.get(i).name.toLowerCase().contains(query.toLowerCase()))
+            {
+                FoodArray.add(FoodKing.FoodMenu.get(i));
+            }
+        }
+        foodArrayAdapter = new FoodArrayAdapter(getApplicationContext(), R.layout.fooditemlist, FoodArray);
+        listView.setAdapter(foodArrayAdapter);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
