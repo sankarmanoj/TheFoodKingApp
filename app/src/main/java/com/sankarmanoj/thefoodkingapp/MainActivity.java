@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -19,12 +17,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.sankarmanoj.thefoodkingapp.R;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,6 +33,8 @@ public class MainActivity extends Activity {
     Menu MainMenu;
     TextView ErrorView;
     String uid;
+    TextView LoadingTV;
+    ProgressBar LoadingPB;
     FoodArrayAdapter foodArrayAdapter;
     BroadcastReceiver registerSuccess;
     BroadcastReceiver menuUpdated;
@@ -89,6 +87,8 @@ public class MainActivity extends Activity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LoadingPB=(ProgressBar)findViewById(R.id.loadingProgressBar);
+        LoadingTV=(TextView)findViewById(R.id.loadingTextView);
         registerSuccess = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -117,15 +117,38 @@ public class MainActivity extends Activity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String type=intent.getStringExtra("type");
+
                 if(type!=null)
                 {
+
                     if(type.equals(QuickPreferences.fullUpdate))
                     {
+                        LoadingTV.setVisibility(View.INVISIBLE);
+                        LoadingPB.setVisibility(View.INVISIBLE);
                         foodArrayAdapter.clear();
                         foodArrayAdapter.addAll(FoodKing.FoodMenu);
                         foodArrayAdapter.notifyDataSetChanged();
+                        Log.d(TAG,"Full Update");
+                    }
+                    if(type.equals(QuickPreferences.commFail))
+                    {
+                        LoadingPB.setVisibility(View.INVISIBLE);
+                        LoadingTV.setText("Unable to Load Menu");
+                        LoadingTV.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                FoodKing.singleton.updateRegistrationState();
+
+                            }
+                        });
+                        Log.d(TAG,"Comm Failed");
                     }
 
+                }
+                else
+                {
+
+                    return ;
                 }
                 if(FoodKing.FoodMenu.size()==foodArrayAdapter.getCount()) {
                     Log.d(TAG,"Same Size");
@@ -163,6 +186,12 @@ public class MainActivity extends Activity {
         listView=(ListView)findViewById(R.id.listView1);
         foodArrayAdapter = new FoodArrayAdapter(getApplicationContext(),R.layout.fooditemlist,FoodKing.FoodMenu);
         listView.setAdapter(foodArrayAdapter);
+        if(FoodKing.gotMenu)
+        {
+            Log.i(TAG,"Got Menu On Load");
+            LoadingTV.setVisibility(View.GONE);
+            LoadingPB.setVisibility(View.GONE);
+        }
         if(!FoodKing.runningGetMenu)
         {
             FoodKing.singleton.updateMenu();

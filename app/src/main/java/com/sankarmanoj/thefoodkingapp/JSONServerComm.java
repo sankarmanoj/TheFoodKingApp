@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,6 +81,7 @@ import javax.net.ssl.SSLContext;
             connection.setDoInput(true);
             String postParameters=createQueryStringForParameters(params[0]);
             connection.setFixedLengthStreamingMode(postParameters.getBytes().length);
+            this.publishProgress(10);
             connection.connect();
             this.publishProgress(40);
             PrintWriter out = new PrintWriter(connection.getOutputStream());

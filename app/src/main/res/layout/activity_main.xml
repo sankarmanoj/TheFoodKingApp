@@ -28,7 +28,23 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loadingProgressBar"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="false" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading Menu"
+        android:id="@+id/loadingTextView"
+        android:layout_below="@+id/loadingProgressBar"
+        android:layout_centerHorizontal="true"
+        android:textSize="24dp" />
 
 
 </RelativeLayout>

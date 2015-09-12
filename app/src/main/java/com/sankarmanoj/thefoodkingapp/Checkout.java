@@ -97,7 +97,7 @@ public class Checkout extends Activity {
             GetOrder getOrder = new GetOrder();
             getOrder.execute(jsonObject1);
             ServerProgressBar.setVisibility(View.VISIBLE);
-            Status.setText("Retriving Order Status...");
+            Status.setText("Retrieving Order Status...");
             ServerProgressBar.setProgress(0);
         }
     }
@@ -165,7 +165,7 @@ public class Checkout extends Activity {
                         finish();
                     }  else if(jsonObject.get("state").equals("timeout"))
                     {
-                        Toast.makeText(getApplicationContext(),"Connection Timed Out. \n Connectivity might be too slow.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Unable to establish connection with Server",Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
@@ -260,7 +260,7 @@ public class Checkout extends Activity {
                   }
                   else if(jsonObject.get("state").equals("timeout"))
                   {
-                      Toast.makeText(getApplicationContext(),"Connection Timed Out. \n Connectivity might be too slow.",Toast.LENGTH_SHORT).show();
+                      Toast.makeText(getApplicationContext(),"Unable to establish connection with Server",Toast.LENGTH_SHORT).show();
                   }
 
 

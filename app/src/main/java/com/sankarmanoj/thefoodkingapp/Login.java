@@ -114,9 +114,13 @@ public class Login extends Activity {
         ForgetPassButton=(Button) findViewById(R.id.forgotPassButton);
         NameTextView = (TextView)findViewById(R.id.nameTextView);
 
-
-        getActionBar().setDisplayShowTitleEnabled(false);
-
+        try {
+            getActionBar().setDisplayShowTitleEnabled(false);
+        }
+        catch (NullPointerException e)
+        {
+            e.printStackTrace();
+        }
         NameET=(EditText)findViewById(R.id.nameEditText);
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -367,7 +371,7 @@ public class Login extends Activity {
                     }
                     else if(jsonObject.get("state").equals("timeout"))
                     {
-                        Toast.makeText(getApplicationContext(),"Connection Timed Out. \n Connectivity might be too slow.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Unable to establish connection with Server",Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -426,7 +430,7 @@ public class Login extends Activity {
                         register.setEnabled(true);
                     }  else if(jsonObject.get("state").equals("timeout"))
                     {
-                        Toast.makeText(getApplicationContext(),"Connection Timed Out. \n Connectivity might be too slow.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Unable to establish connection with Server",Toast.LENGTH_SHORT).show();
                     }
                 }
                 catch (Exception e)

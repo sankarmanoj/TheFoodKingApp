@@ -86,6 +86,9 @@ public class FoodKing extends Application {
             if(jsonObject==null)
             {
                 Toast.makeText(getApplicationContext(),"Error Communicating With Server \n Please try again later",Toast.LENGTH_SHORT).show();
+                Intent gotMenuIntent = new Intent(QuickPreferences.menuUpdated);
+                gotMenuIntent.putExtra("type",QuickPreferences.commFail);
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(gotMenuIntent);
             }
             else
                 try
@@ -102,6 +105,7 @@ public class FoodKing extends Application {
                         FoodMenu=items;
                         gotMenu=true;
                         Intent gotMenuIntent = new Intent(QuickPreferences.menuUpdated);
+                        gotMenuIntent.putExtra("type",QuickPreferences.fullUpdate);
                         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(gotMenuIntent);
 
                         Log.d("MainActivity", "got items");
@@ -109,7 +113,7 @@ public class FoodKing extends Application {
 
                     }  else if(jsonObject.get("state").equals("timeout"))
                     {
-                        Toast.makeText(getApplicationContext(),"Connection Timed Out. \n Connectivity might be too slow.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Unable to establish connection with Server",Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
@@ -151,7 +155,7 @@ public class FoodKing extends Application {
 
                 }  else if(jsonObject.get("state").equals("timeout"))
                 {
-                    Toast.makeText(getApplicationContext(),"Connection Timed Out. \n Connectivity might be too slow.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Unable to establish connection with Server",Toast.LENGTH_SHORT).show();
                 }
                 else
                 {

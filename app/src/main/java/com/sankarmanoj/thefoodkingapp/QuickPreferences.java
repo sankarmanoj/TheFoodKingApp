@@ -8,4 +8,5 @@ public class QuickPreferences {
     public static final String fullUpdate="full-update";
     public static final String regSuccess="registration-successful";
     public static final String noUser="user-doesnt-exist";
+    public static final String commFail="connection-failed";
 }

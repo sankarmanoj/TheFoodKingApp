@@ -83,7 +83,7 @@ public class GCMRegistrationIntentService extends IntentService {
                     startActivity(intent1);
                 }  else if(jsonObject.get("state").equals("timeout"))
                 {
-                    Toast.makeText(getApplicationContext(), "Connection Timed Out. \n Connectivity might be too slow.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Unable to establish connection with Server", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
