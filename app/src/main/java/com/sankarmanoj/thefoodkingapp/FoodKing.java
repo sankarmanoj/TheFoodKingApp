@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class FoodKing extends Application {
    public static FoodKing singleton;
     public static String status;
     public static boolean runningGetMenu=false;
+    public List<String> Locations;
 
     @Override
     public void onCreate() {
@@ -29,6 +31,8 @@ public class FoodKing extends Application {
         singleton=this;
         status="Order Not Confirmed";
         FoodMenu=new ArrayList<>();
+        Locations = new ArrayList<>();
+
 
 
         updateMenu();
@@ -40,19 +44,41 @@ public class FoodKing extends Application {
             startActivity(intent);
         }
     }
-   public void updateMenu()
+    public void setUpLocations(JSONArray jsonArray)
+    {
+
+        try
+        {
+
+            for(int i = 0; i<jsonArray.length();i++)
+            {
+                Locations.add(jsonArray.getString(i));
+            }
+
+        }
+        catch (JSONException e )
+        {
+            e.printStackTrace();
+            Log.d("FoodKingApplication","Invalid JSON Input from Locations");
+        }
+    }
+    public void updateMenu()
    {
+       SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+       String uid = sharedPreferences.getString("uid","null");
+       if(!uid.equals("null")){
        runningGetMenu=true;
        LoadMenu loadMenu  = new LoadMenu();
        try {
            JSONObject toSend = new JSONObject();
            toSend.put("type","get-menu");
+           toSend.put("uid",uid);
            loadMenu.execute(toSend);
        }
        catch (Exception e)
        {
            e.printStackTrace();
-       }
+       }}
    }
     public boolean checkForIntro()
     {
@@ -145,6 +171,10 @@ public class FoodKing extends Application {
                     Intent registered= new Intent(QuickPreferences.regSuccess);
                     registered.putExtra("type", QuickPreferences.regSuccess);
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(registered);
+                    if(!jsonObject.get("version").equals(QuickPreferences.version))
+                    {
+                        Toast.makeText(getApplicationContext(),"Please update the application",Toast.LENGTH_LONG).show();
+                    }
                 }
                 else if(jsonObject.get("state").equals("does-not-exist"))
                 {

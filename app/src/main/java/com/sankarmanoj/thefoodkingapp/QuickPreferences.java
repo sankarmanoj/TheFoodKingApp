@@ -9,4 +9,5 @@ public class QuickPreferences {
     public static final String regSuccess="registration-successful";
     public static final String noUser="user-doesnt-exist";
     public static final String commFail="connection-failed";
+    public static final String version="2.0";
 }

@@ -15,12 +15,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,9 +37,14 @@ public class Login extends Activity {
     Button ForgetPassButton;
     EditText NameET;
     TextView NameTextView;
+    AlertDialog LoadingLocation;
     EditText Password;
     Context ActivityContext;
     EditText ConfirmPass;
+    Activity activity;
+    ArrayAdapter locations;
+    Spinner LocationSpinner;
+    TextView LocationTV;
     public final String TAG="LoginActivity";
 
     @Override
@@ -45,7 +55,7 @@ public class Login extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        activity=this;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("checkIntro",false);
@@ -70,6 +80,8 @@ public class Login extends Activity {
                     registered=true;
                     Log.d(TAG,String.valueOf(registered));
                     RegisterButton.setText("Login");
+                    LocationSpinner.setVisibility(View.INVISIBLE);
+                    LocationTV.setVisibility(View.INVISIBLE);
                     ConfirmPass.setVisibility(View.INVISIBLE);
                     NameET.setVisibility(View.INVISIBLE);
                     NameTextView.setVisibility(View.INVISIBLE);
@@ -83,6 +95,11 @@ public class Login extends Activity {
                 public void onClick(DialogInterface dialog, int which) {
                     registered=false;
                     ConfirmPass.setVisibility(View.VISIBLE);
+                    AlertDialog.Builder adb = new AlertDialog.Builder(activity);
+                    adb.setTitle("Loading Locations..");
+                    LoadingLocation=adb.create();
+                    LoadingLocation.show();
+                    RegisterButton.setEnabled(false);
                     ConfirmPass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                         @Override
                         public void onFocusChange(View v, boolean hasFocus) {
@@ -113,6 +130,8 @@ public class Login extends Activity {
         Password=(EditText)findViewById(R.id.passEditText);
         ForgetPassButton=(Button) findViewById(R.id.forgotPassButton);
         NameTextView = (TextView)findViewById(R.id.nameTextView);
+        LocationSpinner = (Spinner)findViewById(R.id.locationSpinner);
+        LocationTV=(TextView)findViewById(R.id.locationTextView);
 
         try {
             getActionBar().setDisplayShowTitleEnabled(false);
@@ -121,6 +140,23 @@ public class Login extends Activity {
         {
             e.printStackTrace();
         }
+
+
+        locations = new ArrayAdapter(getApplicationContext(), R.layout.locationitem, FoodKing.singleton.Locations);
+        LocationSpinner.setAdapter(locations);
+        JSONObject getLocationCommand = new JSONObject();
+        try{
+            getLocationCommand.put("type","get-locations");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        GetLocation getLocation = new GetLocation();
+        getLocation.execute(getLocationCommand);
+
+
+
         NameET=(EditText)findViewById(R.id.nameEditText);
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +198,7 @@ public class Login extends Activity {
                                 toSend.put("email", EmailET.getText());
                                 toSend.put("password", Password.getText());
                                 toSend.put("type", "add_new_user");
+                                toSend.put("location",LocationSpinner.getSelectedItem().toString());
 
                             }
                             catch (Exception e) {
@@ -378,6 +415,29 @@ public class Login extends Activity {
                 }
         }
     }
+    public  class GetLocation extends  JSONServerComm {
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            super.onPostExecute(jsonObject);
+            if (jsonObject == null) {
+                Toast.makeText(getApplicationContext(), "Error Communicating With Server \n Please try again later", Toast.LENGTH_SHORT).show();
+            } else {
+                try {
+                    if (jsonObject.getString("state").equals("success")) {
+                        LoadingLocation.dismiss();
+                        JSONArray locationArray = new JSONArray(jsonObject.getString("locations"));
+                        FoodKing.singleton.setUpLocations(locationArray);
+                        locations.notifyDataSetChanged();
+                        RegisterButton.setEnabled(true);
+
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
     public class RegisterServerComm extends JSONServerComm
     {
         public RegisterServerComm(Context context,Button register, EditText email,Activity activity)
@@ -403,7 +463,7 @@ public class Login extends Activity {
                         sharedPreferences.edit().putString("uid",uid).apply();
                         AlertDialog.Builder builder = new AlertDialog.Builder(ActivityContext);
                         builder.setTitle("A Registration Link has been sent to your Email Address");
-                        builder.setMessage("Please Click on it register");
+                        builder.setMessage("Please click on it to register");
                         builder.setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -415,6 +475,7 @@ public class Login extends Activity {
                             }
                         });
                         AlertDialog dialog1= builder.create();
+                        FoodKing.singleton.updateMenu();
                         dialog1.show();
 
 

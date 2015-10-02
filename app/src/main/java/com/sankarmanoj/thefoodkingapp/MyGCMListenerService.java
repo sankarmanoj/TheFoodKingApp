@@ -27,13 +27,13 @@ public class MyGCMListenerService extends GcmListenerService {
                 Intent confirm = new Intent("order-status");
                 confirm.putExtra("button", "confirm");
                 confirm.putExtra("status", "Order Confirmed");
-                sendNotification("Order Confirmed");
+                sendOrderNotification("Order Confirmed");
                 LocalBroadcastManager.getInstance(this).sendBroadcast(confirm);
             } else if (button.equals("dispatch")) {
                 Intent confirm = new Intent("order-status");
                 confirm.putExtra("button", "dispatch");
                 confirm.putExtra("status", "Order has been Dispatched.");
-                sendNotification("Order Dispatched");
+                sendOrderNotification("Order Dispatched");
                 LocalBroadcastManager.getInstance(this).sendBroadcast(confirm);
 
             }
@@ -55,6 +55,10 @@ public class MyGCMListenerService extends GcmListenerService {
         {
             FoodKing.singleton.updateRegistrationState();
         }
+        else if (Stringtype.equals("notification"))
+        {
+            sendNotification(data.getString("title"),data.getString("body"));
+        }
     }
 
 
@@ -64,7 +68,7 @@ public class MyGCMListenerService extends GcmListenerService {
          *     - Store message in local database.
          *     - Update UI.
          */
-    private void sendNotification(String message) {
+    private void sendOrderNotification(String message) {
         final Uri RollURI = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.roll);
         Intent intent = new Intent(this, Checkout.class);
         intent.putExtra("action","get-status");
@@ -74,6 +78,27 @@ public class MyGCMListenerService extends GcmListenerService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentTitle("FoodKing Order Update")
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setSound(RollURI)
+                .setColor(Color.argb(255,255,0,0))
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .setContentIntent(pendingIntent);
+        NotificationManager notificationManager =   (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(2,notificationBuilder.build());
+
+
+    }
+    private void sendNotification(String Title, String message) {
+        final Uri RollURI = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.roll);
+        Intent intent = new Intent(this, Checkout.class);
+        intent.putExtra("action","get-status");
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_stat_name)
+                .setContentTitle(Title)
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(RollURI)

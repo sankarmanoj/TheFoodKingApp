@@ -67,7 +67,7 @@ import javax.net.ssl.SSLContext;
         String returnState = new String();
         HttpsURLConnection connection;
         try {
-            URL url = new URL("https://foodking.in/request/");
+            URL url = new URL("https://sankar-manoj.com/request/");
 
 
             connection = (HttpsURLConnection) url.openConnection();

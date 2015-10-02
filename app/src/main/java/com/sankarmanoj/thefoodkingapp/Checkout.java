@@ -198,7 +198,7 @@ public class Checkout extends Activity {
             {
                   if(jsonObject.get("state").equals("order-successful"))
                   {
-                      Toast.makeText(getApplicationContext(),"Placed Order Successfully",Toast.LENGTH_SHORT).show();
+
                       ServerProgressBar.setVisibility(View.INVISIBLE);
                       Status.setText("Placed Order Successfully");
                       JSONObject jsonObject1 = new JSONObject();
